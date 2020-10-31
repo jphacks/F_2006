@@ -78,12 +78,18 @@ function onSubmit() {
   };
   const method = 'POST';
   const headers = {
-    'Accept': 'application/json'
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
   };
+  const body = JSON.stringify(paramObj);
 
   console.log('onSubmit');
 
-  fetch( apiUrl, {method: method, headers: headers, body: ''} ).then(res => {
-    texts = res.json()
+  fetch( apiUrl, {method: method, headers: headers, body: body} ).then(res => {
+    res.json().then(res => {
+      texts = res.text;
+      console.log(res.text);
+      pointer = 0;
+    });
   });
 }
