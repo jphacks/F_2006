@@ -41,13 +41,14 @@ def tangoseisei(d):
             if(second[1] != '名詞'):
                 s = s+second[0]
             else:
-                tango_ls.append(s)
+                if(s != ''):
+                    tango_ls.append(s)
                 s = second[0]
     tango_ls.append(s)
     return tango_ls
 
 
-def morph(string)
+def morph(string):
     return tangoseisei(keitaiso(string))
 
 
