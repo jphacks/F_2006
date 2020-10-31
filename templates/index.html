@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>速読君</title>
+    <script type="text/javascript" src="main.js"></script>
+    <style>
+      #main-form {
+        text-align: center;
+      }
+      textarea {
+        width: 400px;
+        height: 200px;
+        margin-bottom: 20px;
+      }
+      #slider-container {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body style="margin:0px;padding:0px;position:relative">
+    <div id="container" style="width:100%;height:300px;">
+      <canvas id="canvas"></canvas>
+    </div>
+    <form id="main-form" action="" method="POST" autocomplete="off">
+      <textarea id="mainText"></textarea>
+    </form>
+    <div id="slider-container">
+      <input type="range" value="250" min="1" max="500" step="1" oninput="onSliderInput(this.value)">
+    </div>
+  </body>
+</html>
