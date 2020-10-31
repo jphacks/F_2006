@@ -26,8 +26,9 @@
     <script>
       baseUrl = {{baseUrl}}
       
-      const prefixLength = baseUrl.lastIndexOf('/')
-      baseUrl = baseUrl.substr(0,prefixLength+1);
+      // get base url
+      let reg = new RegExp('^.+?[^\/:](?=[?\/]|$)')
+      baseUrl = baseUrl.match(reg)[0]
     </script>
   </head>
   <body style="margin:0px;padding:0px;position:relative">
