@@ -26,3 +26,5 @@ def keitaiso(honbun):
 
     return d
 
+
+
