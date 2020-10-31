@@ -1,6 +1,7 @@
 from flask import Flask, request, render_template, jsonify
 from flask_cors import CORS
 import json
+import morph
 app = Flask(__name__)
 CORS(app)
  
@@ -16,10 +17,10 @@ def result():
 
     # ここで処理
 
-    data = [data]
+    texts = morph.morph(data)
 
     data = {
-        'text': data
+        'text': texts
     }
 
     return jsonify(data)
