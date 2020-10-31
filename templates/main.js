@@ -40,12 +40,12 @@ function render() {
   requestAnimationFrame( render );
 }
 
-window.onload = () => {
+window.addEventListener('load', () => {
   sizing();
 
   function sizing() {
-    var cvs = document.getElementById('canvas'); 
-    var cntr = document.getElementById('container');
+    let cvs = document.getElementById('canvas'); 
+    let cntr = document.getElementById('container');
 
     cvs.height = cntr.offsetHeight;
     cvs.width = cntr.offsetWidth;
@@ -56,8 +56,14 @@ window.onload = () => {
   });
 
   render();
-}
+
+  onSliderInput(spanMs);
+});
 
 function onSliderInput(value) {
   spanMs = value;
+
+  const message = '読み上げる間隔：'+spanMs+" ms";
+
+  document.getElementById('read-speed').innerText = message;
 }
