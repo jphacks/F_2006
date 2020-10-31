@@ -1,4 +1,7 @@
 {% extends "layout.html" %} {% block content %}
-<!--この間に書く-->
-<h1>こんにちは</h1>
+<form action="/result" method="post">
+	テキスト：<br />
+	<textarea name="input-text" rows="4" cols="40"></textarea><br />
+	<input type="submit" value="送信" /><input type="reset" value="リセット" />
+</form>
 {% endblock %}
