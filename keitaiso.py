@@ -26,7 +26,3 @@ def keitaiso(honbun):
 
     return d
 
-
-n = input()
-
-print(keitaiso(n))
