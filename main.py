@@ -11,7 +11,7 @@ def home():
 
 @app.route('/read')
 def read():
-    return render_template('index.html')
+    return render_template('index.html', baseUrl=request.base_url)
 
 @app.route('/result', methods=["POST"])
 def result():
