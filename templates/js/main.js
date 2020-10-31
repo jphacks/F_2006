@@ -67,3 +67,23 @@ function onSliderInput(value) {
 
   document.getElementById('read-speed').innerText = message;
 }
+
+const apiUrl = 'http://localhost:5000/result'
+
+function onSubmit() {
+  const textareaDom = document.getElementById('main-text');
+  const text = textareaDom.value;
+  const paramObj = {
+    text: text
+  };
+  const method = 'POST';
+  const headers = {
+    'Accept': 'application/json'
+  };
+
+  console.log('onSubmit');
+
+  fetch( apiUrl, {method: method, headers: headers, body: ''} ).then(res => {
+    texts = res.json()
+  });
+}
