@@ -27,7 +27,7 @@ function render() {
 	ctx.fillStyle = textColor;
 	ctx.textAlign = "center";
 
-	ctx.fillText(texts[pointer], scrW / 2, scrH / 2);
+	ctx.fillText(texts[pointer], scrW / 2, scrH / 2 + (textSize / 2));
 
 	let nowDate = new Date();
 
