@@ -1,150 +1,165 @@
-window.addEventListener('load', () => {
-  const dropDom = document.getElementById('drop-container');
+window.addEventListener("load", () => {
+	const dropDom = document.getElementById("drop-container");
 
-  dropDom.addEventListener('dragover', (e) => {
-    e.stopPropagation();
-    e.preventDefault();
+	dropDom.addEventListener(
+		"dragover",
+		(e) => {
+			e.stopPropagation();
+			e.preventDefault();
+		},
+		false
+	);
 
-    dropDom.style.background = '#e1e7f0';
-  }, false);
+	dropDom.addEventListener(
+		"dragleave",
+		(e) => {
+			e.stopPropagation();
+			e.preventDefault();
+		},
+		false
+	);
 
-  dropDom.addEventListener('dragleave', (e) => {
-    e.stopPropagation();
-    e.preventDefault();
+	dropDom.addEventListener(
+		"drop",
+		(e) => {
+			e.stopPropagation();
+			e.preventDefault();
 
-    dropDom.style.background = '#ffffff';
-  }, false);
+			const files = e.dataTransfer.files;
 
-  dropDom.addEventListener('drop', (e) => {
-    e.stopPropagation();
-    e.preventDefault();
+			if (files.length > 1) {
+				return alert("一度にアップロードできるファイルは 1 つだけです");
+			}
 
-    dropDom.style.background = '#ffffff';
+			const file = files[0];
 
-    const files = e.dataTransfer.files;
+			console.log(file);
 
-    if( files.length > 1 ) {
-      return alert('一度にアップロードできるファイルは 1 つだけです');
-    }
-
-    const file = files[0];
-
-    console.log(file);
-
-    if( file.type === 'text/plain' ) {
-      readTextFile(file);
-    } else if( file.type === 'application/pdf' ) {
-      readPdfFile(file);
-    } else if( file.type.startsWith('image') ) {
-      readImgFile(file);
-    } else {
-      return alert('対応していないファイル形式です');
-    }
-  }, false);
+			if (file.type === "text/plain") {
+				readTextFile(file);
+			} else if (file.type === "application/pdf") {
+				readPdfFile(file);
+			} else if (file.type.startsWith("image")) {
+				readImgFile(file);
+			} else {
+				return alert("対応していないファイル形式です");
+			}
+		},
+		false
+	);
 });
 
-function setMainText( text ) {
-  const textAreaDom = document.getElementById('main-text');
-  
-  textAreaDom.value = text;
+function setMainText(text) {
+	const textAreaDom = document.getElementById("main-text");
+
+	textAreaDom.value = text;
 }
 
-function readTextFile( file ) {
-  const fr = new FileReader();
-  fr.readAsText(file);
+function readTextFile(file) {
+	const fr = new FileReader();
+	fr.readAsText(file);
 
-  fr.onload = event => {
-    const text = fr.result;
+	fr.onload = (event) => {
+		const text = fr.result;
 
-    setMainText(text);
-  };
+		setMainText(text);
+	};
 }
 
-function readPdfFile( file ) {
-  const fr = new FileReader();
-  
-  fr.onload = () => {
-    const typedArray = new Uint8Array(fr.result);
+function readPdfFile(file) {
+	const fr = new FileReader();
 
-    let pdf = pdfjsLib.getDocument(typedArray);
-    
-    return pdf.promise.then(pdf => { // get all pages text
-      let maxPages = pdf.numPages;
-      let countPromises = []; // collecting all page promises
-      for (var j = 1; j <= maxPages; j++) {
-        let page = pdf.getPage(j);
+	fr.onload = () => {
+		const typedArray = new Uint8Array(fr.result);
 
-        let txt = "";
-        countPromises.push(page.then(page => { // add page promise
-          let textContent = page.getTextContent();
+		let pdf = pdfjsLib.getDocument(typedArray);
 
-          return textContent.then(text => { // return content promise
-            return text.items.map(function (s) { return s.str; }).join(''); // value page text 
-          });
-        }));
-      }
-      // Wait for all pages and join text
-      return Promise.all(countPromises).then(function (texts) {
-        setMainText(texts.join(''));
-      });
-    });
-  }
+		return pdf.promise.then((pdf) => {
+			// get all pages text
+			let maxPages = pdf.numPages;
+			let countPromises = []; // collecting all page promises
+			for (var j = 1; j <= maxPages; j++) {
+				let page = pdf.getPage(j);
 
-  fr.readAsArrayBuffer(file);
+				let txt = "";
+				countPromises.push(
+					page.then((page) => {
+						// add page promise
+						let textContent = page.getTextContent();
+
+						return textContent.then((text) => {
+							// return content promise
+							return text.items
+								.map(function (s) {
+									return s.str;
+								})
+								.join(""); // value page text
+						});
+					})
+				);
+			}
+			// Wait for all pages and join text
+			return Promise.all(countPromises).then(function (texts) {
+				setMainText(texts.join(""));
+			});
+		});
+	};
+
+	fr.readAsArrayBuffer(file);
 }
 
 let loaded = false;
 let worker;
 
-async function readImgFile( file ) {
-  let prog = document.getElementById('tesseract-progress');
+async function readImgFile(file) {
+	let prog = document.getElementById("tesseract-progress");
 
-  prog.style.display = "block";
+	prog.style.display = "block";
 
-  if( !loaded ) {
-    const { createWorker } = Tesseract;
-    worker = createWorker();
-    
-    const loadWorker = async () => {
-      await worker.load();
-      await worker.loadLanguage('jpn');
-      await worker.initialize('jpn');
-    }
+	if (!loaded) {
+		const { createWorker } = Tesseract;
+		worker = createWorker();
 
-    await loadWorker()
+		const loadWorker = async () => {
+			await worker.load();
+			await worker.loadLanguage("jpn");
+			await worker.initialize("jpn");
+		};
 
-    loaded = true;
-  }
+		await loadWorker();
 
-  worker.recognize(file).then(r => {
-    prog.style.display = "none";
-    
-    const text = trimImgText(r.data.text); 
-    setMainText(text);
-  });
+		loaded = true;
+	}
+
+	worker.recognize(file).then((r) => {
+		prog.style.display = "none";
+
+		const text = trimImgText(r.data.text);
+		setMainText(text);
+	});
 }
 
-function trimImgText( text ) {
-  const words = text.split(' ');
+function trimImgText(text) {
+	const words = text.split(" ");
 
-  const isJapanese = word => {
-    for( let i = 0; i < word.length; ++i ) if( word.charCodeAt(i) >= 256 )
-      return true;
+	const isJapanese = (word) => {
+		for (let i = 0; i < word.length; ++i)
+			if (word.charCodeAt(i) >= 256) return true;
 
-    return false;
-  }
+		return false;
+	};
 
-  let ret = "";
+	let ret = "";
 
-  for( let i = 0; i < words.length; ++i ) {
-    if( i && !isJapanese(words[i-1]) && !isJapanese(words[i]) ) {
-      ret += ' ';
-    }
+	for (let i = 0; i < words.length; ++i) {
+		if (i && !isJapanese(words[i - 1]) && !isJapanese(words[i])) {
+			ret += " ";
+		}
 
-    ret += words[i];
-  }
+		ret += words[i];
+	}
 
-  ret = ret.split('\n').join('');
+	ret = ret.split("\n").join("");
 
-  return ret;
+	return ret;
 }
