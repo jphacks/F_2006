@@ -24,11 +24,18 @@
       }
     </style>
     <script>
-      baseUrl = {{baseUrl}}
+      baseUrl = '{{baseUrl}}'
+
+      console.log(baseUrl)
       
       // get base url
       let reg = new RegExp('^.+?[^\/:](?=[?\/]|$)')
       baseUrl = baseUrl.match(reg)[0]
+
+      if( !baseUrl.endsWith('/') )
+        baseUrl += '/';
+
+      console.log(baseUrl)
     </script>
   </head>
   <body style="margin:0px;padding:0px;position:relative">
