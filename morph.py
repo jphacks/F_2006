@@ -44,7 +44,7 @@ def tangoseisei(d):
 
             elif(
                 skip or                     # 前の単語が冠動詞などで有無を言わさず接続する場合
-                tango_info[1] == '判定子' or
+                tango_info[1] == '判定詞' or
                 tango_info[1] == '格助詞' or
                 tango_info[1] == '引用助詞' or
                 tango_info[1] == '連用助詞' or
@@ -59,7 +59,8 @@ def tangoseisei(d):
             elif(                           # 次の単語を必ず一文節としてこの後に続ける場合
                 tango_info[1] == '冠名詞' or
                 tango_info[1] == '冠動詞' or
-                tango_info[1] == '冠形容詞'):
+                tango_info[1] == '冠形容詞' or
+                tango_info[1] == '冠数詞'):
                 if (buf_str != ''):
                     tango_ls.append(buf_str)
                 buf_str = tango_info[0]
