@@ -33,15 +33,42 @@ di = [[['おはようございます', '独立詞'], [' ', '空白'], ['今日',
 
 def tangoseisei(d):
     tango_ls = []
-    s = ''
-    for first in d:
-        for second in first:
-            if(second[1] != '名詞'):
-                s = s+second[0]
-            else:
-                if(s != ''):
-                    tango_ls.append(s)
-                s = second[0]
+    buf_str = ''
+    skip = False
+    for first in d:                 # 各文情報を取得
+        for tango_info in first:    # 各単語情報を取得
+            if(tango_info[1] == '空白'):    # 空白の場合
+                if (buf_str != ''):
+                    tango_ls.append(buf_str)
+                    buf_str = ''
+
+            elif(
+                skip or                     # 前の単語が冠動詞などで有無を言わさず接続する場合
+                tango_info[1] == '判定子' or
+                tango_info[1] == '格助詞' or
+                tango_info[1] == '引用助詞' or
+                tango_info[1] == '連用助詞' or
+                tango_info[1] == '終助詞' or
+                tango_info[1] == '間投詞' or
+                tango_info[1] == '句点' or
+                tango_info[1] == '読点'):
+                if (skip):
+                    skip = False
+                buf_str = buf_str+tango_info[0]     
+
+            elif(                           # 次の単語を必ず一文節としてこの後に続ける場合
+                tango_info[1] == '冠名詞' or
+                tango_info[1] == '冠動詞' or
+                tango_info[1] == '冠形容詞'):
+                if (buf_str != ''):
+                    tango_ls.append(buf_str)
+                buf_str = tango_info[0]
+                skip = True
+
+            else:                           # その他
+                if(buf_str != ''):
+                    tango_ls.append(buf_str)
+                buf_str = tango_info[0]
     tango_ls.append(s)
     return tango_ls
 
