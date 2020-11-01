@@ -93,10 +93,28 @@ function readPdfFile( file ) {
   fr.readAsArrayBuffer(file);
 }
 
-function readImgFile( file ) {
+let loaded = false;
+let worker;
+
+async function readImgFile( file ) {
   let prog = document.getElementById('tesseract-progress');
 
   prog.style.display = "block";
+
+  if( !loaded ) {
+    const { createWorker } = Tesseract;
+    worker = createWorker();
+    
+    const loadWorker = async () => {
+      await worker.load();
+      await worker.loadLanguage('jpn');
+      await worker.initialize('jpn');
+    }
+
+    await loadWorker()
+
+    loaded = true;
+  }
 
   worker.recognize(file).then(r => {
     prog.style.display = "none";
