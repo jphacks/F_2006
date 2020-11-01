@@ -42,19 +42,23 @@ def tangoseisei(d):
                     tango_ls.append(buf_str)
                     buf_str = ''
 
-            elif(
-                skip or                     # 前の単語が冠動詞などで有無を言わさず接続する場合
-                tango_info[1] == '判定詞' or
-                tango_info[1] == '格助詞' or
-                tango_info[1] == '引用助詞' or
-                tango_info[1] == '連用助詞' or
-                tango_info[1] == '終助詞' or
-                tango_info[1] == '間投詞' or
-                tango_info[1] == '句点' or
-                tango_info[1] == '読点'):
-                if (skip):
-                    skip = False
+            elif(skip):                     # 前の単語が冠動詞などで有無を言わさず接続する場合
+                skip = False
                 buf_str = buf_str+tango_info[0]     
+
+            elif(
+                tango_info[1] == '名詞' or
+                tango_info[1] == '動詞語幹' or
+                tango_info[1] == '補助名詞' or
+                tango_info[1] == '形容詞語幹' or
+                tango_info[1] == '連体詞' or
+                tango_info[1] == '連用詞' or
+                tango_info[1] == '接続詞' or
+                tango_info[1] == '独立詞'
+                ):
+                if(buf_str != ''):
+                    tango_ls.append(buf_str)
+                buf_str = tango_info[0]
 
             elif(                           # 次の単語を必ず一文節としてこの後に続ける場合
                 tango_info[1] == '冠名詞' or
@@ -67,10 +71,9 @@ def tangoseisei(d):
                 skip = True
 
             else:                           # その他
-                if(buf_str != ''):
-                    tango_ls.append(buf_str)
-                buf_str = tango_info[0]
-    tango_ls.append(s)
+                buf_str = buf_str + tango_info[0]
+                
+    tango_ls.append(buf_str)
     return tango_ls
 
 
