@@ -24,33 +24,11 @@
 
 		<script src="https://unpkg.com/tesseract.js@v2.1.0/dist/tesseract.min.js"></script>
 		<script type="text/javascript" src="../static/js/main.js"></script>
-		<script type="text/javascript" src="../static/js/drop.js"></script>
-		<style>
-			#main-form {
-				text-align: center;
-			}
-			textarea {
-				width: 400px;
-				height: 200px;
-				margin-bottom: 20px;
-			}
-			#slider-container {
-				text-align: center;
-			}
-			button {
-				margin-bottom: 20px;
-			}
-      #tesseract-progress {
-        display: none;
-        text-align: center;
-        margin-bottom: 20px;
-      }
-      .center-pad {
-        text-align: center;
-        margin-bottom: 20px;
-      }
-		</style>
-		<script>
+    <script type="text/javascript" src="../static/js/drop.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sass.js/0.10.7/sass.sync.min.js"></script>
+    <script src="https://unpkg.com/@neos21/in-browser-sass@1.0.2/in-browser-sass.min.js"></script>
+    <link rel="stylesheet" type="text/scss" href="../static/css/design.scss">
+    <script>
 			baseUrl = "{{baseUrl}}";
 
 			console.log(baseUrl);

@@ -60,26 +60,6 @@
 			oninput="onSliderInput(this.value)"
 		/>
   </div>
-  
-  <div class="center-pad">
-    <input
-      type="color"
-      id="background-color"
-      value="#fefefe"
-      onchange="onBgColorChange(this.value);"
-      onkeyup="onBgColorChange(this.value);"
-    >
-    <label for="background-color">背景色</label>
-    
-    <input
-      type="color"
-      id="text-color"
-      value="#282828"
-      onchange="onTextColorChange(this.value);"
-      onkeyup="onTextColorChange(this.value);"
-    >
-    <label for="text-color">文字色</label>
-  </div>
 
   <div id="slider-container" class="center-pad">
     <span id="text-size"></span><br/>
@@ -94,5 +74,64 @@
       oninput="onTextSliderInput(this.value)"
     />
   </div>
+
+  <h2>カラーテーマをクリックして選択してください</h2>
+  <section class="color-list"> 
+    <div class="color-block" onclick="setColor('#316745', '#ffffff');">
+      <div class="colors">
+        <span class="color-box" data-hex="316745"></span>
+        <span class="color-box" data-hex="ffffff"></span>
+      </div>
+      <h3>Dark Theme 1</h3>
+      <ul>
+        <li>316745</li>
+        <li>ffffff</li>
+      </ul>
+    </div>
+    <div class="color-block" onclick="setColor('#1a110d', '#ffffff')">
+      <div class="colors">
+        <span class="color-box" data-hex="1a110d"></span>
+        <span class="color-box" data-hex="ffffff"></span>
+      </div>
+      <h3>Dark Theme 2</h3>
+      <ul>
+        <li>1a110d</li>
+        <li>ffffff</li>
+      </ul>
+    </div>
+    <div class="color-block" onclick="setColor('#fdf6e4', '#4f6778')">
+      <div class="colors">
+        <span class="color-box" data-hex="fdf6e4"></span>
+        <span class="color-box" data-hex="4f6778"></span>
+      </div>
+      <h3>Cream</h3>
+      <ul>
+        <li>fdf6e4</li>
+        <li>4f6778</li>
+      </ul>
+    </div>
+    <div class="color-block" onclick="setColor('#db1442', '#fdf0ec')">
+      <div class="colors">
+        <span class="color-box" data-hex="db1442"></span>
+        <span class="color-box" data-hex="fdf0ec"></span>
+      </div>
+      <h3>Pink</h3>
+      <ul>
+        <li>db1442</li>
+        <li>fdf0ec</li>
+      </ul>
+    </div>
+    <div class="color-block" onclick="setColor('#f2f2f2', '#32559f')">
+      <div class="colors">
+        <span class="color-box" data-hex="f2f2f2"></span>
+        <span class="color-box" data-hex="32559f"></span>
+      </div>
+      <h3>Blue</h3>
+      <ul>
+        <li>f2f2f2</li>
+        <li>32559f</li>
+      </ul>
+    </div>
+  </section>
 </div>
 {% endblock %}

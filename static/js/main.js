@@ -61,6 +61,26 @@ window.addEventListener("load", () => {
   onSliderInput(spanMs);
   onTextSliderInput(textSize);
   onSubmit(initialSentence);
+
+  const spans = document.getElementsByClassName('color-box');
+
+  (function classLoop(i) {
+    setTimeout(() => {
+      if (i >= spans.length) {
+        return;
+      }
+
+      const { hex } = spans[i].dataset;
+
+      spans[i].style.backgroundColor = `#${hex}`;
+      spans[i].classList.add('fadeIn');
+      spans[i].parentNode.parentNode.classList.add('flipIn');
+
+      i++;
+
+      classLoop(i);
+    }, (i == 0) ? 0 : i * 10);
+  })(0);
 });
 
 function onSliderInput(value) {
@@ -123,17 +143,11 @@ function onReset() {
     pointer = 0;
 }
 
-function onBgColorChange( color ) {
-  bgColor = color;
-  console.log(color);
-
-  const cntr = document.getElementById('body');
-  cntr.style.backgroundColor = bgColor;
-}
-
-function onTextColorChange( color ) {
-  textColor = color;
-  console.log(color);
+function setColor( colorBg, colorTxt ) {
+  bgColor = colorBg;
+  textColor = colorTxt;
+  
+  document.getElementById('body').style.backgroundColor = bgColor;
 }
 
 function onTextSliderInput( size ) {
