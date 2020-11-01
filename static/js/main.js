@@ -1,4 +1,4 @@
-let texts = [];
+let texts = [""];
 
 const initialSentence = 'このりんごは赤いです．あの鳥は青いです．そのバナナは黄色いです．';
 
@@ -10,6 +10,8 @@ let isParse = false;
 
 let lastDate = new Date();
 
+let bgColor = "#fefefe", textColor = "#282828";
+
 function render() {
   const cvs = document.getElementById('canvas'); 
   const ctx = cvs.getContext('2d');  
@@ -17,7 +19,7 @@ function render() {
   
   ctx.clearRect( 0, 0, scrW, scrH );
   ctx.font = "normal 30px 'Yu Gothic'";
-  ctx.fillStyle = "rgb(40, 40, 40)";
+  ctx.fillStyle = textColor;
   ctx.textAlign = 'center';
 
   ctx.fillText( texts[pointer], scrW/2, scrH/2 );
@@ -50,7 +52,6 @@ window.addEventListener('load', () => {
   render();
 
   onSliderInput(spanMs);
-
   onSubmit(initialSentence);
 });
 
@@ -111,4 +112,17 @@ function onParse() {
 function onReset() {
     lastDate = new Date();
     pointer = 0;
+}
+
+function onBgColorChange( color ) {
+  bgColor = color;
+  console.log(color);
+
+  const cntr = document.getElementById('body');
+  cntr.style.backgroundColor = bgColor;
+}
+
+function onTextColorChange( color ) {
+  textColor = color;
+  console.log(color);
 }

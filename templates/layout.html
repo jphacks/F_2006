@@ -44,6 +44,10 @@
         text-align: center;
         margin-bottom: 20px;
       }
+      .center-pad {
+        text-align: center;
+        margin-bottom: 20px;
+      }
 		</style>
 		<script>
 			baseUrl = "{{baseUrl}}";
@@ -59,7 +63,7 @@
 			console.log(baseUrl);
 		</script>
 	</head>
-	<body style="margin: 0px; padding: 0px; position: relative">
+	<body id="body" style="margin: 0px; padding: 0px; position: relative">
 		{% block content %} {% endblock %}
 		<script
 			src="https://code.jquery.com/jquery-3.5.1.slim.min.js"

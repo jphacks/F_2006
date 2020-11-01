@@ -46,7 +46,7 @@
   	<button onclick="onReset()">文章の初めに戻る</button>
   </div>
 
-	<div id="slider-container">
+	<div id="slider-container" class="center-pad">
 		<span id="read-speed"></span><br />
 		<input
 			type="range"
@@ -56,6 +56,28 @@
 			step="1"
 			oninput="onSliderInput(this.value)"
 		/>
-	</div>
+  </div>
+  
+  <div class="center-pad">
+    <input
+      type="color"
+      id="background-color"
+      value="#fefefe"
+      onchange="onBgColorChange(this.value);"
+      onkeyup="onBgColorChange(this.value);"
+    >
+    <label for="background-color">背景色</label>
+  </div>
+
+  <div class="center-pad">
+    <input
+      type="color"
+      id="text-color"
+      value="#282828"
+      onchange="onTextColorChange(this.value);"
+      onkeyup="onTextColorChange(this.value);"
+    >
+    <label for="text-color">文字色</label>
+  </div>
 </div>
 {% endblock %}
