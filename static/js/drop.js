@@ -31,10 +31,12 @@ window.addEventListener('load', () => {
 
     console.log(file);
 
-    if( file.type === 'text/plain') {
+    if( file.type === 'text/plain' ) {
       readTextFile(file);
     } else if( file.type === 'application/pdf' ) {
       readPdfFile(file);
+    } else if( file.type.startsWith('image') ) {
+      readImgFile(file);
     } else {
       return alert('対応していないファイル形式です');
     }
@@ -89,4 +91,39 @@ function readPdfFile( file ) {
   }
 
   fr.readAsArrayBuffer(file);
+}
+
+function readImgFile( file ) {
+  const fr = new FileReader();
+  fr.readAsDataURL(file);
+
+  fr.onload = () => {
+    drawImage(fr.result);
+  }
+}
+
+function drawImage( url ) {
+  const cvs = document.getElementById('dummy-canvas');
+  const ctx = cvs.getContext('2d');
+  const image = new Image();
+
+  image.src = url;
+  image.crossOrigin = 'Anonymous';
+  image.onload = () => {
+    cvs.width = image.width;
+    cvs.height = image.height;
+    ctx.drawImage( image, 0, 0 );
+
+    const src = ctx.getImageData( 0, 0, canvas.width, canvas.height );
+
+    let prog = document.getElementById('tesseract-progress');
+
+    Tesseract.recognize(src).progress(p => {
+      prog.style.display = "block";
+      prog.value = Math.floor(p.progress*100);
+    }).then(r => {
+      prog.style.display = "none";
+      setMainText(r.text);
+    });
+  }
 }
