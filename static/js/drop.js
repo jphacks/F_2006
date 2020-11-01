@@ -100,6 +100,33 @@ function readImgFile( file ) {
 
   worker.recognize(file).then(r => {
     prog.style.display = "none";
-    setMainText(r.data.text);
+    
+    const text = trimImgText(r.data.text); 
+    setMainText(text);
   });
+}
+
+function trimImgText( text ) {
+  const words = text.split(' ');
+
+  const isJapanese = word => {
+    for( let i = 0; i < word.length; ++i ) if( word.charCodeAt(i) >= 256 )
+      return true;
+
+    return false;
+  }
+
+  let ret = "";
+
+  for( let i = 0; i < words.length; ++i ) {
+    if( i && !isJapanese(words[i-1]) && !isJapanese(words[i]) ) {
+      ret += ' ';
+    }
+
+    ret += words[i];
+  }
+
+  ret = ret.split('\n').join('');
+
+  return ret;
 }
