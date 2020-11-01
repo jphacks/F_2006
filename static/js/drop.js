@@ -31,10 +31,12 @@ window.addEventListener('load', () => {
 
     console.log(file);
 
-    if( file.type === 'text/plain') {
+    if( file.type === 'text/plain' ) {
       readTextFile(file);
     } else if( file.type === 'application/pdf' ) {
       readPdfFile(file);
+    } else if( file.type.startsWith('image') ) {
+      readImgFile(file);
     } else {
       return alert('対応していないファイル形式です');
     }
@@ -89,4 +91,15 @@ function readPdfFile( file ) {
   }
 
   fr.readAsArrayBuffer(file);
+}
+
+function readImgFile( file ) {
+  let prog = document.getElementById('tesseract-progress');
+
+  prog.style.display = "block";
+
+  worker.recognize(file).then(r => {
+    prog.style.display = "none";
+    setMainText(r.data.text);
+  });
 }
