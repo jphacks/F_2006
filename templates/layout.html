@@ -20,7 +20,22 @@
 		<script
 			type="text/javascript"
 			src="../static/js/pdf.worker.js"
-		></script>
+    ></script>
+    
+    <script src='https://unpkg.com/tesseract.js@v2.1.0/dist/tesseract.min.js'></script>
+    <script>
+      const { createWorker } = Tesseract;
+      const worker = createWorker();
+      
+      const loadWorker = async () => {
+        await worker.load();
+        await worker.loadLanguage('jpn');
+        await worker.initialize('jpn');
+      }
+
+      loadWorker();
+    </script>
+
 		<script type="text/javascript" src="../static/js/main.js"></script>
 		<script type="text/javascript" src="../static/js/drop.js"></script>
 		<style>
@@ -38,6 +53,11 @@
 			button {
 				margin-bottom: 20px;
 			}
+      #tesseract-progress {
+        display: none;
+        text-align: center;
+        margin-bottom: 20px;
+      }
 		</style>
 		<script>
 			baseUrl = "{{baseUrl}}";
