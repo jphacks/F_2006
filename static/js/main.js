@@ -68,9 +68,11 @@ function onSliderInput(value) {
   document.getElementById('read-speed').innerText = message;
 }
 
-const apiUrl = 'http://localhost:5000/result'
+let baseUrl;
 
 function onSubmit() {
+  const apiUrl = baseUrl+'result';
+
   const textareaDom = document.getElementById('main-text');
   const text = textareaDom.value;
   const paramObj = {

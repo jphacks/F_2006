@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>速読君</title>
+    <script type="text/javascript" src="../static/js/pdf.js"></script>
+    <script type="text/javascript" src="../static/js/pdf.worker.js"></script>
+    <script type="text/javascript" src="../static/js/main.js"></script>
+    <script type="text/javascript" src="../static/js/drop.js"></script>
+    <style>
+      #main-form {
+        text-align: center;
+      }
+      textarea {
+        width: 400px;
+        height: 200px;
+        margin-bottom: 20px;
+      }
+      #slider-container {
+        text-align: center;
+      }
+      button {
+        margin-bottom: 20px;
+      }
+    </style>
+    <script>
+      baseUrl = '{{baseUrl}}'
+
+      console.log(baseUrl)
+      
+      // get base url
+      let reg = new RegExp('^.+?[^\/:](?=[?\/]|$)')
+      baseUrl = baseUrl.match(reg)[0]
+
+      if( !baseUrl.endsWith('/') )
+        baseUrl += '/';
+
+      console.log(baseUrl)
+    </script>
+  </head>
+  <body style="margin:0px;padding:0px;position:relative">
+    {% block content %}
+
+    {% endblock %}
+  </body>
+</html>
+  
