@@ -27,11 +27,6 @@ function render() {
   ctx.fillStyle = textColor;
   ctx.textAlign = 'center';
 
-	ctx.clearRect(0, 0, scrW, scrH);
-	ctx.font = "normal 30px 'Yu Gothic'";
-	ctx.fillStyle = "rgb(40, 40, 40)";
-	ctx.textAlign = "center";
-
 	ctx.fillText(texts[pointer], scrW / 2, scrH / 2);
 
 	let nowDate = new Date();
