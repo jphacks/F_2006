@@ -1,16 +1,6 @@
-let texts = [
-  "この",
-  "りんごは",
-  "赤い",
-  "です．",
-  "あの",
-  "鳥は",
-  "青い",
-  "です．",
-  "その",
-  "バナナは",
-  "黄色いです．"
-];
+let texts = [];
+
+const initialSentence = 'このりんごは赤いです．あの鳥は青いです．そのバナナは黄色いです．';
 
 let pointer = 0;
 
@@ -60,6 +50,8 @@ window.addEventListener('load', () => {
   render();
 
   onSliderInput(spanMs);
+
+  onSubmit(initialSentence);
 });
 
 function onSliderInput(value) {
@@ -72,11 +64,18 @@ function onSliderInput(value) {
 
 let baseUrl;
 
-function onSubmit() {
+function onSubmit( orgText ) {
   const apiUrl = baseUrl+'result';
 
-  const textareaDom = document.getElementById('main-text');
-  const text = textareaDom.value;
+  let text;
+
+  if( !orgText ) {
+    const textareaDom = document.getElementById('main-text');
+    text = textareaDom.value;
+  } else {
+    text = orgText;
+  }
+
   const paramObj = {
     text: text
   };
@@ -112,5 +111,4 @@ function onParse() {
 function onReset() {
     lastDate = new Date();
     pointer = 0;
-
 }
