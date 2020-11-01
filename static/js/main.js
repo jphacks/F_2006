@@ -17,15 +17,15 @@ let textColor = "#282828";
 let textSize = 30;
 
 function render() {
-  const cvs = document.getElementById('canvas'); 
-  const ctx = cvs.getContext('2d');  
-  const scrW = cvs.width;
-  const scrH = cvs.height;
-  
-  ctx.clearRect( 0, 0, scrW, scrH );
-  ctx.font = "normal "+textSize+"px 'Yu Gothic'";
-  ctx.fillStyle = textColor;
-  ctx.textAlign = 'center';
+	const cvs = document.getElementById("canvas");
+	const ctx = cvs.getContext("2d");
+	const scrW = cvs.width;
+	const scrH = cvs.height;
+
+	ctx.clearRect(0, 0, scrW, scrH);
+	ctx.font = "normal " + textSize + "px 'Yu Gothic'";
+	ctx.fillStyle = textColor;
+	ctx.textAlign = "center";
 
 	ctx.fillText(texts[pointer], scrW / 2, scrH / 2);
 
@@ -58,29 +58,32 @@ window.addEventListener("load", () => {
 
 	render();
 
-  onSliderInput(spanMs);
-  onTextSliderInput(textSize);
-  onSubmit(initialSentence);
+	onSliderInput(spanMs);
+	onTextSliderInput(textSize);
+	onSubmit(initialSentence);
 
-  const spans = document.getElementsByClassName('color-box');
+	const spans = document.getElementsByClassName("color-box");
 
-  (function classLoop(i) {
-    setTimeout(() => {
-      if (i >= spans.length) {
-        return;
-      }
+	(function classLoop(i) {
+		setTimeout(
+			() => {
+				if (i >= spans.length) {
+					return;
+				}
 
-      const { hex } = spans[i].dataset;
+				const { hex } = spans[i].dataset;
 
-      spans[i].style.backgroundColor = `#${hex}`;
-      spans[i].classList.add('fadeIn');
-      spans[i].parentNode.parentNode.classList.add('flipIn');
+				spans[i].style.backgroundColor = `#${hex}`;
+				spans[i].classList.add("fadeIn");
+				spans[i].parentNode.parentNode.classList.add("flipIn");
 
-      i++;
+				i++;
 
-      classLoop(i);
-    }, (i == 0) ? 0 : i * 10);
-  })(0);
+				classLoop(i);
+			},
+			i == 0 ? 0 : i * 10
+		);
+	})(0);
 });
 
 function onSliderInput(value) {
@@ -139,21 +142,41 @@ function onParse() {
 }
 
 function onReset() {
-    lastDate = new Date();
-    pointer = 0;
+	lastDate = new Date();
+	pointer = 0;
 }
 
-function setColor( colorBg, colorTxt ) {
-  bgColor = colorBg;
-  textColor = colorTxt;
+function setColor(colorBg, colorTxt) {
+	bgColor = colorBg;
+	textColor = colorTxt;
 
-  document.getElementById('body').style.backgroundColor = bgColor;
+	document.getElementById("body").style.backgroundColor = bgColor;
+
+	var elements = document.getElementsByClassName("btn-col");
+
+	if (bgColor == "#316745" || bgColor == "#1a110d") {
+		document.getElementById("body").style.color = "#ffffff";
+		elements[0].classList.remove("btn-outline-dark");
+		elements[0].classList.add("btn-outline-light");
+		elements[1].classList.remove("btn-outline-dark");
+		elements[1].classList.add("btn-outline-light");
+		elements[2].classList.remove("btn-outline-dark");
+		elements[2].classList.add("btn-outline-light");
+	} else {
+		document.getElementById("body").style.color = "#000000";
+		elements[0].classList.remove("btn-outline-light");
+		elements[0].classList.add("btn-outline-dark");
+		elements[1].classList.remove("btn-outline-light");
+		elements[1].classList.add("btn-outline-dark");
+		elements[2].classList.remove("btn-outline-light");
+		elements[2].classList.add("btn-outline-dark");
+	}
 }
 
-function onTextSliderInput( size ) {
-  textSize = size;
+function onTextSliderInput(size) {
+	textSize = size;
 
-  const message = 'テキストサイズ：'+size+" px";
+	const message = "テキストサイズ：" + size + " px";
 
-  document.getElementById('text-size').innerText = message;
+	document.getElementById("text-size").innerText = message;
 }
