@@ -156,6 +156,8 @@ function setColor(colorBg, colorTxt) {
 
 	if (bgColor == "#316745" || bgColor == "#1a110d") {
 		document.getElementById("body").style.color = "#ffffff";
+		document.getElementById("col-title").style.borderBottom =
+			"1px solid #eeeeee";
 		elements[0].classList.remove("btn-outline-dark");
 		elements[0].classList.add("btn-outline-light");
 		elements[1].classList.remove("btn-outline-dark");
@@ -164,6 +166,8 @@ function setColor(colorBg, colorTxt) {
 		elements[2].classList.add("btn-outline-light");
 	} else {
 		document.getElementById("body").style.color = "#000000";
+		document.getElementById("col-title").style.borderBottom =
+			"1px solid #7f7975";
 		elements[0].classList.remove("btn-outline-light");
 		elements[0].classList.add("btn-outline-dark");
 		elements[1].classList.remove("btn-outline-light");
