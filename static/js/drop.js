@@ -98,7 +98,7 @@ function readImgFile( file ) {
 
   prog.style.display = "block";
 
-  Tesseract.recognize(file).then(r => {
+  worker.recognize(file).then(r => {
     prog.style.display = "none";
     setMainText(r.data.text);
   });
