@@ -94,36 +94,12 @@ function readPdfFile( file ) {
 }
 
 function readImgFile( file ) {
-  const fr = new FileReader();
-  fr.readAsDataURL(file);
+  let prog = document.getElementById('tesseract-progress');
 
-  fr.onload = () => {
-    drawImage(fr.result);
-  }
-}
+  prog.style.display = "block";
 
-function drawImage( url ) {
-  const cvs = document.getElementById('dummy-canvas');
-  const ctx = cvs.getContext('2d');
-  const image = new Image();
-
-  image.src = url;
-  image.crossOrigin = 'Anonymous';
-  image.onload = () => {
-    cvs.width = image.width;
-    cvs.height = image.height;
-    ctx.drawImage( image, 0, 0 );
-
-    const src = ctx.getImageData( 0, 0, canvas.width, canvas.height );
-
-    let prog = document.getElementById('tesseract-progress');
-
-    Tesseract.recognize(src).progress(p => {
-      prog.style.display = "block";
-      prog.value = Math.floor(p.progress*100);
-    }).then(r => {
-      prog.style.display = "none";
-      setMainText(r.text);
-    });
-  }
+  Tesseract.recognize(file).then(r => {
+    prog.style.display = "none";
+    setMainText(r.data.text);
+  });
 }
