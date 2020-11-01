@@ -1,7 +1,18 @@
 {% extends "layout.html" %} {% block content %}
-<form action="/result" method="post">
-	テキスト：<br />
-	<textarea name="input-text" rows="4" cols="40"></textarea><br />
-	<input type="submit" value="送信" /><input type="reset" value="リセット" />
-</form>
+
+<div class="row justify-content-center">
+	<div class="col-4">
+		<form action="/result" method="post">
+			テキストを入力してください：<br />
+			<div class="form-group">
+				<textarea name="input-text" rows="4" cols="40"></textarea><br />
+			</div>
+			<div class="form-group">
+				<input type="submit" value="送信" />
+
+				<input type="reset" value="リセット" />
+			</div>
+		</form>
+	</div>
+</div>
 {% endblock %}
