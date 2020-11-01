@@ -146,7 +146,7 @@ function onReset() {
 function setColor( colorBg, colorTxt ) {
   bgColor = colorBg;
   textColor = colorTxt;
-  
+
   document.getElementById('body').style.backgroundColor = bgColor;
 }
 
