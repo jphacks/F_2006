@@ -16,6 +16,8 @@ let pointer = 0;
 
 let spanMs = 250;
 
+let isParse = false;
+
 let lastDate = new Date();
 
 function render() {
@@ -32,7 +34,7 @@ function render() {
 
   let nowDate = new Date();
 
-  if( nowDate-lastDate >= spanMs ) {
+  if( nowDate-lastDate >= spanMs && isParse == false) {
     pointer = (pointer + 1) % texts.length;
     lastDate = nowDate;
   }
@@ -94,4 +96,21 @@ function onSubmit() {
       pointer = 0;
     });
   });
+}
+
+function onParse() {
+    if (isParse == true) {
+        lastDate = new Date();
+
+        isParse = false;
+    }
+    else {
+        isParse = true;
+    }
+}
+
+function onReset() {
+    lastDate = new Date();
+    pointer = 0;
+
 }
