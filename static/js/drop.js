@@ -4,22 +4,16 @@ window.addEventListener('load', () => {
   dropDom.addEventListener('dragover', (e) => {
     e.stopPropagation();
     e.preventDefault();
-
-    dropDom.style.background = '#e1e7f0';
   }, false);
 
   dropDom.addEventListener('dragleave', (e) => {
     e.stopPropagation();
     e.preventDefault();
-
-    dropDom.style.background = '#ffffff';
   }, false);
 
   dropDom.addEventListener('drop', (e) => {
     e.stopPropagation();
     e.preventDefault();
-
-    dropDom.style.background = '#ffffff';
 
     const files = e.dataTransfer.files;
 
