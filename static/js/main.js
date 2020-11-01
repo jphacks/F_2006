@@ -10,7 +10,9 @@ let isParse = false;
 
 let lastDate = new Date();
 
-let bgColor = "#fefefe", textColor = "#282828";
+let bgColor = "#fefefe";
+let textColor = "#282828";
+let textSize = 30;
 
 function render() {
   const cvs = document.getElementById('canvas'); 
@@ -18,7 +20,7 @@ function render() {
   const scrW = cvs.width, scrH = cvs.height;
   
   ctx.clearRect( 0, 0, scrW, scrH );
-  ctx.font = "normal 30px 'Yu Gothic'";
+  ctx.font = "normal "+textSize+"px 'Yu Gothic'";
   ctx.fillStyle = textColor;
   ctx.textAlign = 'center';
 
@@ -52,6 +54,7 @@ window.addEventListener('load', () => {
   render();
 
   onSliderInput(spanMs);
+  onTextSliderInput(textSize);
   onSubmit(initialSentence);
 });
 
@@ -125,4 +128,12 @@ function onBgColorChange( color ) {
 function onTextColorChange( color ) {
   textColor = color;
   console.log(color);
+}
+
+function onTextSliderInput( size ) {
+  textSize = size;
+
+  const message = 'テキストサイズ：'+size+" px";
+
+  document.getElementById('text-size').innerText = message;
 }

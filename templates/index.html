@@ -67,9 +67,7 @@
       onkeyup="onBgColorChange(this.value);"
     >
     <label for="background-color">背景色</label>
-  </div>
-
-  <div class="center-pad">
+    
     <input
       type="color"
       id="text-color"
@@ -78,6 +76,20 @@
       onkeyup="onTextColorChange(this.value);"
     >
     <label for="text-color">文字色</label>
+  </div>
+
+  <div id="slider-container" class="center-pad">
+    <span id="text-size"></span><br/>
+
+    <input
+      type="range"
+      id="text-slider"
+      value="30"
+      min="1"
+      max="100"
+      step="1"
+      oninput="onTextSliderInput(this.value)"
+    />
   </div>
 </div>
 {% endblock %}
