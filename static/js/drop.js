@@ -93,13 +93,58 @@ function readPdfFile( file ) {
   fr.readAsArrayBuffer(file);
 }
 
-function readImgFile( file ) {
+let loaded = false;
+let worker;
+
+async function readImgFile( file ) {
   let prog = document.getElementById('tesseract-progress');
 
   prog.style.display = "block";
 
+  if( !loaded ) {
+    const { createWorker } = Tesseract;
+    worker = createWorker();
+    
+    const loadWorker = async () => {
+      await worker.load();
+      await worker.loadLanguage('jpn');
+      await worker.initialize('jpn');
+    }
+
+    await loadWorker()
+
+    loaded = true;
+  }
+
   worker.recognize(file).then(r => {
     prog.style.display = "none";
-    setMainText(r.data.text);
+    
+    const text = trimImgText(r.data.text); 
+    setMainText(text);
   });
+}
+
+function trimImgText( text ) {
+  const words = text.split(' ');
+
+  const isJapanese = word => {
+    for( let i = 0; i < word.length; ++i ) if( word.charCodeAt(i) >= 256 )
+      return true;
+
+    return false;
+  }
+
+  let ret = "";
+
+  for( let i = 0; i < words.length; ++i ) {
+    if( i && !isJapanese(words[i-1]) && !isJapanese(words[i]) ) {
+      ret += ' ';
+    }
+
+    ret += words[i];
+  }
+
+  ret = ret.split('\n').join('');
+
+  return ret;
 }
