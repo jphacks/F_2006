@@ -1,3 +1,6 @@
 env
 .DS_Store
+
 /.vs
+.vscode/
+__pycache__/
