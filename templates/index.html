@@ -49,7 +49,7 @@
 		</button>
 	</div>
 
-	<div id="slider-container">
+	<div id="slider-container" class="center-pad">
 		<span id="read-speed"></span><br />
 		<input
       type="range"
@@ -59,6 +59,79 @@
 			step="1"
 			oninput="onSliderInput(this.value)"
 		/>
-	</div>
+  </div>
+
+  <div id="slider-container" class="center-pad">
+    <span id="text-size"></span><br/>
+
+    <input
+      type="range"
+      id="text-slider"
+      value="30"
+      min="1"
+      max="100"
+      step="1"
+      oninput="onTextSliderInput(this.value)"
+    />
+  </div>
+
+  <h2>カラーテーマをクリックして選択してください</h2>
+  <section class="color-list"> 
+    <div class="color-block" onclick="setColor('#316745', '#ffffff');">
+      <div class="colors">
+        <span class="color-box" data-hex="316745"></span>
+        <span class="color-box" data-hex="ffffff"></span>
+      </div>
+      <h3>Dark Theme 1</h3>
+      <ul>
+        <li>背景色: #316745</li>
+        <li>文字色: #ffffff</li>
+      </ul>
+    </div>
+    <div class="color-block" onclick="setColor('#1a110d', '#ffffff')">
+      <div class="colors">
+        <span class="color-box" data-hex="1a110d"></span>
+        <span class="color-box" data-hex="ffffff"></span>
+      </div>
+      <h3>Dark Theme 2</h3>
+      <ul>
+        <li>背景色: #1a110d</li>
+        <li>文字色: #ffffff</li>
+      </ul>
+    </div>
+    <div class="color-block" onclick="setColor('#fdf6e4', '#4f6778')">
+      <div class="colors">
+        <span class="color-box" data-hex="fdf6e4"></span>
+        <span class="color-box" data-hex="4f6778"></span>
+      </div>
+      <h3>Cream</h3>
+      <ul>
+        <li>背景色: #fdf6e4</li>
+        <li>文字色: #4f6778</li>
+      </ul>
+    </div>
+    <div class="color-block" onclick="setColor('#fdf0ec', '#db1442')">
+      <div class="colors">
+        <span class="color-box" data-hex="fdf0ec"></span>
+        <span class="color-box" data-hex="db1442"></span>
+      </div>
+      <h3>Pink</h3>
+      <ul>
+        <li>背景色: #fdf0ec</li>
+        <li>文字色: #db1442</li>
+      </ul>
+    </div>
+    <div class="color-block" onclick="setColor('#f2f2f2', '#32559f')">
+      <div class="colors">
+        <span class="color-box" data-hex="f2f2f2"></span>
+        <span class="color-box" data-hex="32559f"></span>
+      </div>
+      <h3>Blue</h3>
+      <ul>
+        <li>背景色: #f2f2f2</li>
+        <li>文字色: #32559f</li>
+      </ul>
+    </div>
+  </section>
 </div>
 {% endblock %}
