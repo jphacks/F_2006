@@ -12,7 +12,7 @@
 	>
 		<span class="navbar-toggler-icon"></span>
 	</button>
-	<a class="navbar-brand" href="">速読君</a>
+	<a class="navbar-brand" href="">Flash Reading</a>
 
 	<div class="collapse navbar-collapse" id="navbarTogglerDemo02">
 		<ul class="navbar-nav mr-auto mt-2 mt-md-0">
@@ -20,7 +20,7 @@
 				<a class="nav-link" href="{{url_for('home')}}">説明 </a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="{{url_for('read')}}">動かす</a>
+				<a class="nav-link" href="{{url_for('read')}}">Try！</a>
 			</li>
 		</ul>
 	</div>
@@ -30,14 +30,36 @@
 		<div class="col-2"></div>
 		<div class="col-8">
 			<div style="margin: 80px"></div>
-			<h4 style="line-height: 1.4em">
-				速読君は、語句を連続でフラッシュ表示する「高速逐次視覚提示」を用いてテキストを高速に読むことを可能にしたアプリです。
-			</h4>
+			<h5 style="line-height: 1.4em">
+				Flash Reading
+				は、語句を連続でフラッシュ表示する「高速逐次視覚提示」を用いてテキストを素早く読むことを可能にしたアプリです。
+			</h5>
 			<div style="margin: 40px"></div>
-			<h4 style="line-height: 1.4em">
-				PDFや写真をテキストエリアにドラッグ&ドロップすると文字を読み取ることができます。
-			</h4>
+			<h5 style="line-height: 1.4em">
+				人間は眼を動かしている間は文字情報を受け取っておらず、文字の上に停留しているときに情報を受け取ります。
+				このアプリを利用することで視線を動かす時間を減らし、読み取ることだけに集中することができます。
+			</h5>
 			<div style="margin: 40px"></div>
+			<h5 style="line-height: 1.4em">
+				フォームにテキストを入力することで自分の読みたい文章をフラッシュ表示できます。
+				また、PDFや写真をテキストエリアにドラッグ&ドロップすると文字を読み取ることができます。（写真の読み込みには時間がかかります。）
+			</h5>
+			<div style="margin: 40px"></div>
+			<div style="margin: 40px"></div>
+			<h5 style="line-height: 1.4em">
+				ーこんな人におすすめー
+				<div style="margin: 10px"></div>
+				<ul>
+					<li>文章を読み飛ばしがちな人</li>
+					<li>速読の練習をしたい人</li>
+					<li>小さい文字を読むのがつらい人</li>
+				</ul>
+			</h5>
+			<div style="margin: 40px"></div>
+			<h5 style="line-height: 1.4em">
+				当てはまった方は是非使ってみてください！
+			</h5>
+			<div style="margin: 80px"></div>
 		</div>
 		<div class="col-2"></div>
 	</div>
@@ -46,5 +68,6 @@
 			使ってみる！
 		</a>
 	</div>
+	<div style="margin: 120px"></div>
 </div>
 {% endblock %}
