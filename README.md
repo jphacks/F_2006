@@ -1,6 +1,6 @@
 # Flash Reading
 
-[![IMAGE ALT TEXT HERE](https://user-images.githubusercontent.com/61216147/97860832-2c1dd180-1d46-11eb-91e2-313a5baa6f83.png)](https://flash-reading.herokuapp.com/)
+[![unknown](https://user-images.githubusercontent.com/61216147/97867819-e6ff9c80-1d51-11eb-8c5d-4e82e9e47f44.png)](https://flash-reading.herokuapp.com/)
 
 ## 製品概要
 　
