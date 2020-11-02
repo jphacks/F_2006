@@ -15,6 +15,21 @@ jobs:
       - run:
           name: heroku maintenance off
           command: heroku maintenance:off --app ${HEROKU_APP_NAME_PROD}
+  deploy-dev:
+    machine:
+      image: circleci/classic:edge
+    steps:
+      - checkout
+      - run:
+          name: heroku maintenance on
+          command: heroku maintenance:on --app ${HEROKU_APP_NAME_DEV}
+      - run:
+          name: heroku deploy
+          command: |
+            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME_DEV.git master
+      - run:
+          name: heroku maintenance off
+          command: heroku maintenance:off --app ${HEROKU_APP_NAME_DEV}
 
 workflows:
   version: 2
@@ -24,3 +39,7 @@ workflows:
           filters:
             branches:
               only: master
+      - deploy-dev:
+          filters:
+            branches:
+              only: development
