@@ -13,7 +13,7 @@
 	>
 		<span class="navbar-toggler-icon"></span>
 	</button>
-	<a class="navbar-brand" href="">速読君</a>
+	<a class="navbar-brand" href="">Flash Reading</a>
 
 	<div class="collapse navbar-collapse" id="navbarTogglerDemo02">
 		<ul class="navbar-nav mr-auto mt-2 mt-md-0">
@@ -21,7 +21,7 @@
 				<a class="nav-link" href="{{url_for('home')}}">説明 </a>
 			</li>
 			<li class="nav-item active">
-				<a class="nav-link" href="{{url_for('read')}}">動かす</a>
+				<a class="nav-link" href="{{url_for('read')}}">Try！</a>
 			</li>
 		</ul>
 	</div>
@@ -74,29 +74,24 @@
 			oninput="onTextSliderInput(this.value)"
 		/>
 	</div>
+	<div style="margin-bottom: 20px"></div>
 	<div class="container">
-		<h2 id="col-title">カラーテーマをクリックして選択してください</h2>
+		<h4
+			id="col-title"
+			style="border-bottom: 1px solid #7f7975; padding-bottom: 10px"
+		>
+			カラーテーマをクリックして選択
+		</h4>
 		<section class="color-list">
-			<div class="color-block" onclick="setColor('#316745', '#ffffff');">
+			<div class="color-block" onclick="setColor('#ffffff', '#282828')">
 				<div class="colors">
-					<span class="color-box" data-hex="316745"></span>
 					<span class="color-box" data-hex="ffffff"></span>
+					<span class="color-box" data-hex="282828"></span>
 				</div>
-				<h3>Dark Theme 1</h3>
+				<h3>Default</h3>
 				<ul>
-					<li>背景色: #316745</li>
-					<li>文字色: #ffffff</li>
-				</ul>
-			</div>
-			<div class="color-block" onclick="setColor('#1a110d', '#ffffff')">
-				<div class="colors">
-					<span class="color-box" data-hex="1a110d"></span>
-					<span class="color-box" data-hex="ffffff"></span>
-				</div>
-				<h3>Dark Theme 2</h3>
-				<ul>
-					<li>背景色: #1a110d</li>
-					<li>文字色: #ffffff</li>
+					<li>背景色: #ffffff</li>
+					<li>文字色: #282828</li>
 				</ul>
 			</div>
 			<div class="color-block" onclick="setColor('#fdf6e4', '#4f6778')">
@@ -132,15 +127,27 @@
 					<li>文字色: #32559f</li>
 				</ul>
 			</div>
-			<div class="color-block" onclick="setColor('#ffffff', '#282828')">
+
+			<div class="color-block" onclick="setColor('#316745', '#ffffff');">
 				<div class="colors">
+					<span class="color-box" data-hex="316745"></span>
 					<span class="color-box" data-hex="ffffff"></span>
-					<span class="color-box" data-hex="282828"></span>
 				</div>
-				<h3>Default</h3>
+				<h3>Dark Theme 1</h3>
 				<ul>
-					<li>背景色: #ffffff</li>
-					<li>文字色: #282828</li>
+					<li>背景色: #316745</li>
+					<li>文字色: #ffffff</li>
+				</ul>
+			</div>
+			<div class="color-block" onclick="setColor('#1a110d', '#ffffff')">
+				<div class="colors">
+					<span class="color-box" data-hex="1a110d"></span>
+					<span class="color-box" data-hex="ffffff"></span>
+				</div>
+				<h3>Dark Theme 2</h3>
+				<ul>
+					<li>背景色: #1a110d</li>
+					<li>文字色: #ffffff</li>
 				</ul>
 			</div>
 		</section>
