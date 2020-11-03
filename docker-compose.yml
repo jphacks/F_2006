@@ -1,0 +1,10 @@
+version: '3'
+services:
+  db:
+    build: .
+    ports:
+      - 5433:5432
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_DB: flash-reading-db
+      POSTGRES_PASSWORD: admin
