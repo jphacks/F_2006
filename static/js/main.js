@@ -146,6 +146,25 @@ function onReset() {
 	pointer = 0;
 }
 
+function onBack() {
+	if (spanMs * pointer < 1000) {
+		if (texts.length * spanMs > 10000) {
+			pointer = texts.length - (10000 / spanMs);
+		} else {
+			pointer = 0;
+		}
+	} else if (spanMs * pointer < 10000) {
+		pointer = 0;
+	} else {
+		pointer = pointer - (10000 / spanMs);
+	}
+}
+
+function onSkip() {
+	lastDate = new Date();
+	pointer = (pointer + (10000 / spanMs)) % texts.length;
+}
+
 function setColor(colorBg, colorTxt) {
 	bgColor = colorBg;
 	textColor = colorTxt;
