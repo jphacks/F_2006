@@ -1,12 +1,14 @@
 let texts = [""];
 
 const initialSentence =
-	"Flash Readingは、語句を連続でフラッシュ表示する「高速逐次視覚提示」を用いてテキストを高速に読むことを可能にしたアプリです。\
+  "Flash Readingは、語句を連続でフラッシュ表示する「高速逐次視覚提示」を用いてテキストを高速に読むことを可能にしたアプリです。\
 PDFや写真をテキストエリアにドラッグ & ドロップすると文字を読み取ることができます。";
 
 let pointer = 0;
 
 let spanMs = 250;
+
+let jumpMs = 3000;
 
 let isParse = false;
 
@@ -17,170 +19,176 @@ let textColor = "#282828";
 let textSize = 30;
 
 function render() {
-	const cvs = document.getElementById("canvas");
-	const ctx = cvs.getContext("2d");
-	const scrW = cvs.width;
-	const scrH = cvs.height;
+  const cvs = document.getElementById("canvas");
+  const ctx = cvs.getContext("2d");
+  const scrW = cvs.width;
+  const scrH = cvs.height;
 
-	ctx.clearRect(0, 0, scrW, scrH);
-	ctx.font = "normal " + textSize + "px 'Yu Gothic'";
-	ctx.fillStyle = textColor;
-	ctx.textAlign = "center";
+  ctx.clearRect(0, 0, scrW, scrH);
+  ctx.font = "normal " + textSize + "px 'Yu Gothic'";
+  ctx.fillStyle = textColor;
+  ctx.textAlign = "center";
 
-	ctx.fillText(texts[pointer], scrW / 2, scrH / 2 + (textSize / 2));
+  ctx.fillText(texts[pointer], scrW / 2, scrH / 2 + (textSize / 2));
 
-	let nowDate = new Date();
+  let nowDate = new Date();
 
-	if (nowDate - lastDate >= spanMs && isParse == false) {
-		pointer = (pointer + 1) % texts.length;
-		lastDate = nowDate;
-	}
+  if (nowDate - lastDate >= spanMs && isParse == false) {
+    pointer = (pointer + 1) % texts.length;
+    lastDate = nowDate;
+  }
 
-	requestAnimationFrame(render);
+  requestAnimationFrame(render);
 }
 
 window.addEventListener("load", () => {
-	sizing();
+  sizing();
 
-	function sizing() {
-		let cvs = document.getElementById("canvas");
-		let cntr = document.getElementById("container");
+  function sizing() {
+    let cvs = document.getElementById("canvas");
+    let cntr = document.getElementById("container");
 
-		cvs.height = cntr.offsetHeight;
-		cvs.width = cntr.offsetWidth;
-	}
+    cvs.height = cntr.offsetHeight;
+    cvs.width = cntr.offsetWidth;
+  }
 
-	window.addEventListener("resize", function () {
-		!window.requestAnimationFrame
-			? setTimeout(sizing, 300)
-			: window.requestAnimationFrame(sizing);
-	});
+  window.addEventListener("resize", function () {
+    !window.requestAnimationFrame
+      ? setTimeout(sizing, 300)
+      : window.requestAnimationFrame(sizing);
+  });
 
-	render();
+  render();
 
-	onSliderInput(spanMs);
-	onTextSliderInput(textSize);
-	onSubmit(initialSentence);
+  onSliderInput(spanMs);
+  onTextSliderInput(textSize);
+  onSubmit(initialSentence);
 
-	const spans = document.getElementsByClassName("color-box");
+  const spans = document.getElementsByClassName("color-box");
 
-	(function classLoop(i) {
-		setTimeout(
-			() => {
-				if (i >= spans.length) {
-					return;
-				}
+  for (let i = 0; i < spans.length; ++i) {
+    const { hex } = spans[i].dataset;
 
-				const { hex } = spans[i].dataset;
-
-				spans[i].style.backgroundColor = `#${hex}`;
-				spans[i].classList.add("fadeIn");
-				spans[i].parentNode.parentNode.classList.add("flipIn");
-
-				i++;
-
-				classLoop(i);
-			},
-			i == 0 ? 0 : i * 10
-		);
-	})(0);
+    spans[i].style.backgroundColor = `#${hex}`;
+    spans[i].classList.add("fadeIn");
+    spans[i].parentNode.parentNode.classList.add("flipIn");
+  }
 });
 
 function onSliderInput(value) {
-	spanMs = value;
+  spanMs = value;
 
-	const message = "読み上げる間隔：" + spanMs + " ms";
+  const message = "読み上げる間隔：" + spanMs + " ms";
 
-	document.getElementById("read-speed").innerText = message;
+  document.getElementById("read-speed").innerText = message;
 }
 
 let baseUrl;
 
 function onSubmit(orgText) {
-	const apiUrl = baseUrl + "result";
+  const apiUrl = baseUrl + "result";
 
-	let text;
+  let text;
 
-	if (!orgText) {
-		const textareaDom = document.getElementById("main-text");
-		text = textareaDom.value;
-	} else {
-		text = orgText;
-	}
+  if (!orgText) {
+    const textareaDom = document.getElementById("main-text");
+    text = textareaDom.value;
+  } else {
+    text = orgText;
+  }
 
-	const paramObj = {
-		text: text,
-	};
-	const method = "POST";
-	const headers = {
-		Accept: "application/json",
-		"Content-Type": "application/json",
-	};
-	const body = JSON.stringify(paramObj);
+  const paramObj = {
+    text: text,
+  };
+  const method = "POST";
+  const headers = {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  };
+  const body = JSON.stringify(paramObj);
 
-	console.log("onSubmit");
+  console.log("onSubmit");
 
-	fetch(apiUrl, { method: method, headers: headers, body: body }).then(
-		(res) => {
-			res.json().then((res) => {
-				texts = res.text;
-				console.log(res.text);
-				pointer = 0;
-			});
-		}
-	);
+  fetch(apiUrl, { method: method, headers: headers, body: body }).then(
+    (res) => {
+      res.json().then((res) => {
+        texts = res.text;
+        console.log(res.text);
+        pointer = 0;
+      });
+    }
+  );
 }
 
 function onParse() {
-	if (isParse == true) {
-		lastDate = new Date();
+  if (isParse == true) {
+    lastDate = new Date();
 
-		isParse = false;
-	} else {
-		isParse = true;
-	}
+    isParse = false;
+  } else {
+    isParse = true;
+  }
 }
 
 function onReset() {
-	lastDate = new Date();
-	pointer = 0;
+  lastDate = new Date();
+  pointer = 0;
 }
 
-function setColor(colorBg, colorTxt) {
-	bgColor = colorBg;
-	textColor = colorTxt;
-
-	document.getElementById("body").style.backgroundColor = bgColor;
-
-	var elements = document.getElementsByClassName("btn-col");
-
-	if (bgColor == "#316745" || bgColor == "#1a110d") {
-		document.getElementById("body").style.color = "#ffffff";
-		document.getElementById("col-title").style.borderBottom =
-			"1px solid #eeeeee";
-		elements[0].classList.remove("btn-outline-dark");
-		elements[0].classList.add("btn-outline-light");
-		elements[1].classList.remove("btn-outline-dark");
-		elements[1].classList.add("btn-outline-light");
-		elements[2].classList.remove("btn-outline-dark");
-		elements[2].classList.add("btn-outline-light");
+function onBack() {
+	if (spanMs * pointer < 1000) {
+		if (texts.length * spanMs > jumpMs) {
+			pointer = texts.length - (jumpMs / spanMs);
+		} else {
+			pointer = 0;
+		}
+	} else if (spanMs * pointer < jumpMs) {
+		pointer = 0;
 	} else {
-		document.getElementById("body").style.color = "#000000";
-		document.getElementById("col-title").style.borderBottom =
-			"1px solid #7f7975";
-		elements[0].classList.remove("btn-outline-light");
-		elements[0].classList.add("btn-outline-dark");
-		elements[1].classList.remove("btn-outline-light");
-		elements[1].classList.add("btn-outline-dark");
-		elements[2].classList.remove("btn-outline-light");
-		elements[2].classList.add("btn-outline-dark");
+		pointer = pointer - (jumpMs / spanMs);
 	}
 }
 
+function onSkip() {
+	lastDate = new Date();
+	pointer = (pointer + (jumpMs / spanMs)) % texts.length;
+}
+
+function setColor(colorBg, colorTxt) {
+  bgColor = colorBg;
+  textColor = colorTxt;
+
+  document.getElementById("body").style.backgroundColor = bgColor;
+
+  var elements = document.getElementsByClassName("btn-col");
+
+  if (bgColor == "#316745" || bgColor == "#1a110d") {
+    document.getElementById("body").style.color = "#ffffff";
+    document.getElementById("col-title").style.borderBottom =
+      "1px solid #eeeeee";
+    elements[0].classList.remove("btn-outline-dark");
+    elements[0].classList.add("btn-outline-light");
+    elements[1].classList.remove("btn-outline-dark");
+    elements[1].classList.add("btn-outline-light");
+    elements[2].classList.remove("btn-outline-dark");
+    elements[2].classList.add("btn-outline-light");
+  } else {
+    document.getElementById("body").style.color = "#000000";
+    document.getElementById("col-title").style.borderBottom =
+      "1px solid #7f7975";
+    elements[0].classList.remove("btn-outline-light");
+    elements[0].classList.add("btn-outline-dark");
+    elements[1].classList.remove("btn-outline-light");
+    elements[1].classList.add("btn-outline-dark");
+    elements[2].classList.remove("btn-outline-light");
+    elements[2].classList.add("btn-outline-dark");
+  }
+}
+
 function onTextSliderInput(size) {
-	textSize = size;
+  textSize = size;
 
-	const message = "テキストサイズ：" + size + " px";
+  const message = "テキストサイズ：" + size + " px";
 
-	document.getElementById("text-size").innerText = message;
+  document.getElementById("text-size").innerText = message;
 }
