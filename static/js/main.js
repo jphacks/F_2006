@@ -241,7 +241,9 @@ function onSave() {
 
   console.log("onSave");
 
-  fetch(apiUrl, { method: method, headers: headers, body: body });
+  fetch(apiUrl, { method: method, headers: headers, body: body }).then(_ => {
+    window.location.href = baseUrl + 'list';
+  });
 }
 
 // param required: uuid
@@ -264,7 +266,9 @@ function onDelete(uuid) {
 
   console.log("onDelete");
 
-  fetch(apiUrl, { method: method, headers: headers, body: body });
+  fetch(apiUrl, { method: method, headers: headers, body: body }).then(_ => {
+    location.reload();
+  });
 }
 
 // param required: uuid, current_pos
@@ -290,7 +294,9 @@ function onPosSave() {
 
   console.log("onPosSave");
 
-  fetch(apiUrl, { method: method, headers: headers, body: body });
+  fetch(apiUrl, { method: method, headers: headers, body: body }).then(_ => {
+    window.location.href = baseUrl + 'list';
+  });
 }
 
 function summarize(str) {

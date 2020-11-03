@@ -1,2 +1,2 @@
-FROM postgres:11-alpine
+FROM postgres:12-alpine
 ENV LANG ja_JP.utf8
