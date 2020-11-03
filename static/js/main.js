@@ -8,6 +8,8 @@ let pointer = 0;
 
 let spanMs = 250;
 
+let jumpMs = 3000;
+
 let isParse = false;
 
 let lastDate = new Date();
@@ -131,6 +133,25 @@ function onParse() {
 function onReset() {
   lastDate = new Date();
   pointer = 0;
+}
+
+function onBack() {
+	if (spanMs * pointer < 1000) {
+		if (texts.length * spanMs > jumpMs) {
+			pointer = texts.length - (jumpMs / spanMs);
+		} else {
+			pointer = 0;
+		}
+	} else if (spanMs * pointer < jumpMs) {
+		pointer = 0;
+	} else {
+		pointer = pointer - (jumpMs / spanMs);
+	}
+}
+
+function onSkip() {
+	lastDate = new Date();
+	pointer = (pointer + (jumpMs / spanMs)) % texts.length;
 }
 
 function setColor(colorBg, colorTxt) {
