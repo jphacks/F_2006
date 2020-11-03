@@ -15,7 +15,7 @@ Jinja2==2.11.2
 MarkupSafe==1.1.1
 marshmallow==3.9.0
 marshmallow-sqlalchemy==0.24.0
-psycopg2 @ file:///C:/Users/MEIP-users/Downloads/psycopg2-2.8.6-cp39-cp39-win_amd64.whl
+psycopg2===2.8.6
 requests==2.24.0
 six==1.15.0
 SQLAlchemy==1.3.20
