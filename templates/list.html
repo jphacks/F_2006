@@ -13,8 +13,11 @@
       <li class="nav-item">
         <a class="nav-link" href="{{url_for('home')}}">説明 </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{url_for('read')}}">Try！</a>
+      </li>
       <li class="nav-item active">
-        <a class="nav-link" href="{{url_for('read', uuid='')}}">Try！</a>
+        <a class="nav-link" href="{{url_for('list')}}">保存した文書</a>
       </li>
     </ul>
   </div>
@@ -26,9 +29,8 @@
   <h3>{{doc.content}}</h3>
   <h3>{{doc.current_pos}}</h3>
   <h3>{{doc.created_at}}</h3>
-  <a href="{{url_for('doc', uuid=doc.uuid)}}" class="btn btn-dark text-center">
-    読む！
-  </a>
+  <a href="{{url_for('doc', uuid=doc.uuid)}}" class="btn btn-dark text-center">文書を読む</a>
+  <button class="btn btn-dark text-center" onclick="onDelete('{{doc.uuid}}')">文書を削除</button>
   {% endfor %}
 </div>
 {% endblock %}

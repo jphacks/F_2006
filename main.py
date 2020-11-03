@@ -59,7 +59,7 @@ class tSplitUnitsSchema(ma.SQLAlchemyAutoSchema):
     
 @app.route('/')
 def home():
-    return render_template('home.html', baseUrl=request.base_url) 
+    return render_template('home.html', baseUrl=request.base_url, docObj="{}") 
 
 @app.route('/list')
 def list():
@@ -189,6 +189,14 @@ def delete():
              filter(tDocuments.uuid==data['uuid']).\
              first()
     db.session.delete(doc)
+
+    units = db.session.\
+       query(tSplitUnits).\
+       filter(tSplitUnits.doc_uuid==data['uuid']).\
+       all()
+
+    for unit in units:
+        db.session.delete(unit)
 
     db.session.commit()
     

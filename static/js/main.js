@@ -73,6 +73,11 @@ window.addEventListener("load", () => {
     texts = docObj.units.map(unit => unit.content);
     pointer = docObj.doc.current_pos;
   } else {
+    const invisibleList = ['btn-pos-save'];
+
+    for (let domId of invisibleList)
+      document.getElementById(domId).style.display = 'none';
+
     onSubmit(initialSentence);
   }
 
@@ -151,20 +156,20 @@ function onReset() {
 function onBack() {
   if (spanMs * pointer < 1000) {
     if (texts.length * spanMs > jumpMs) {
-      pointer = texts.length - (jumpMs / spanMs);
+      pointer = texts.length - Math.floor(jumpMs / spanMs);
     } else {
       pointer = 0;
     }
   } else if (spanMs * pointer < jumpMs) {
     pointer = 0;
   } else {
-    pointer = pointer - (jumpMs / spanMs);
+    pointer = pointer - Math.floor(jumpMs / spanMs);
   }
 }
 
 function onSkip() {
   lastDate = new Date();
-  pointer = (pointer + (jumpMs / spanMs)) % texts.length;
+  pointer = (pointer + Math.floor(jumpMs / spanMs)) % texts.length;
 }
 
 function setColor(colorBg, colorTxt) {
@@ -204,7 +209,7 @@ function onTextSliderInput(size) {
   document.getElementById("text-size").innerText = message;
 }
 
-// content, name, current_pos, split_units
+// param required: content, name, current_pos, split_units
 function onSave() {
   const apiUrl = baseUrl + "insert";
 
@@ -235,6 +240,55 @@ function onSave() {
   const body = JSON.stringify(paramObj);
 
   console.log("onSave");
+
+  fetch(apiUrl, { method: method, headers: headers, body: body });
+}
+
+// param required: uuid
+function onDelete(uuid) {
+  const apiUrl = baseUrl + "delete";
+
+  // Validation
+  if (!uuid)
+    return alert("エラーが発生しました");
+
+  const paramObj = {
+    uuid: uuid,
+  };
+  const method = "POST";
+  const headers = {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  };
+  const body = JSON.stringify(paramObj);
+
+  console.log("onDelete");
+
+  fetch(apiUrl, { method: method, headers: headers, body: body });
+}
+
+// param required: uuid, current_pos
+function onPosSave() {
+  const apiUrl = baseUrl + "update";
+
+  // Validation
+  if (!docObj.doc.uuid)
+    return alert("エラーが発生しました");
+  if (pointer < 0 || pointer >= texts.length)
+    return alert("エラーが発生しました");
+
+  const paramObj = {
+    uuid: docObj.doc.uuid,
+    current_pos: pointer,
+  };
+  const method = "POST";
+  const headers = {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  };
+  const body = JSON.stringify(paramObj);
+
+  console.log("onPosSave");
 
   fetch(apiUrl, { method: method, headers: headers, body: body });
 }
