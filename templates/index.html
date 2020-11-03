@@ -2,20 +2,11 @@
 
 <!--ナビゲーションバー-->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-	<button
-		class="navbar-toggler navbar-toggler-right"
-		type="button"
-		data-toggle="collapse"
-		data-target="#navbarTogglerDemo02"
-		aria-controls="navbarTogglerDemo02"
-		aria-expanded="false"
-		aria-label="Toggle navigation"
-	>
+	<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02"
+	 aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
 	</button>
-	<a class="navbar-brand text-monospace" style="pointer-events: none"
-		>Flash Reading</a
-	>
+	<a class="navbar-brand text-monospace" style="pointer-events: none">Flash Reading</a>
 
 	<div class="collapse navbar-collapse" id="navbarTogglerDemo02">
 		<ul class="navbar-nav mr-auto mt-2 mt-md-0">
@@ -23,7 +14,7 @@
 				<a class="nav-link" href="{{url_for('home')}}">説明 </a>
 			</li>
 			<li class="nav-item active">
-				<a class="nav-link" href="{{url_for('read')}}">Try！</a>
+				<a class="nav-link" href="{{url_for('read', uuid='')}}">Try！</a>
 			</li>
 		</ul>
 	</div>
@@ -39,7 +30,8 @@
 	<div id="main-form">
 		読み上げる文章 :
 		<div style="margin: 10px"></div>
-		<textarea id="main-text"></textarea><br />
+		<textarea id="main-text"></textarea>
+		<br />
 		<button onclick="onSubmit()" class="btn btn-outline-dark btn-col">
 			読み上げ開始
 		</button>
@@ -47,8 +39,8 @@
 			一時停止/再開
 		</button>
 		<button onclick="onReset()" class="btn btn-outline-dark btn-col">
-			文章の初めに戻る</button
-		><br />
+			文章の初めに戻る</button>
+		<br />
 		<button onclick="onBack()" class="btn btn-outline-dark btn-col">
 			3秒戻す
 		</button>
@@ -58,36 +50,20 @@
 	</div>
 
 	<div id="slider-container" class="center-pad">
-		<span id="read-speed"></span><br />
-		<input
-			type="range"
-			value="250"
-			min="1"
-			max="500"
-			step="1"
-			oninput="onSliderInput(this.value)"
-		/>
+		<span id="read-speed"></span>
+		<br />
+		<input type="range" value="250" min="1" max="500" step="1" oninput="onSliderInput(this.value)" />
 	</div>
 
 	<div id="slider-container" class="center-pad">
-		<span id="text-size"></span><br />
+		<span id="text-size"></span>
+		<br />
 
-		<input
-			type="range"
-			id="text-slider"
-			value="30"
-			min="1"
-			max="100"
-			step="1"
-			oninput="onTextSliderInput(this.value)"
-		/>
+		<input type="range" id="text-slider" value="30" min="1" max="100" step="1" oninput="onTextSliderInput(this.value)" />
 	</div>
 	<div style="margin-bottom: 20px"></div>
 	<div class="container">
-		<h4
-			id="col-title"
-			style="border-bottom: 1px solid #7f7975; padding-bottom: 10px"
-		>
+		<h4 id="col-title" style="border-bottom: 1px solid #7f7975; padding-bottom: 10px">
 			カラーテーマをクリックして選択
 		</h4>
 		<section class="color-list">

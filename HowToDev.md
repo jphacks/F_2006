@@ -9,5 +9,5 @@
 * 起動
   * F_2006 直下で `python ./main.py`
   * エラーが出たら `pip` で必要なパッケージをインストール
-  * 特に `sqlalchemy` の他に `psycopg2` もインストールしてください (Windows10 の場合エラーが出るかも: https://stackoverflow.com/questions/36846579/error-when-installing-psycopg2-on-windows-10)
+  * 特に `sqlalchemy` の他に `psycopg2` もインストールしてください (Windows10 の場合インストール or 実行時にエラーが出たらここに従う: http://prunus1350.hatenablog.com/entry/2016/01/09/135110)
   * `localhost:5000` にアクセス

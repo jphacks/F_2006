@@ -18,15 +18,13 @@ class tDocuments(db.Model):
     __tablename__ = 't_documents'
     uuid = db.Column(db.String(36), primary_key=True)
     content = db.Column(db.Text, primary_key=False)
-    split_uuid = db.Column(db.String(36), primary_key=False)
     current_pos = db.Column(db.Integer, primary_key=False)
     created_at = db.Column(db.DateTime(), primary_key=True)
     updated_at = db.Column(db.DateTime(), primary_key=True)
 
-    def __init__(self, uuid, content, split_uuid, current_pos):
+    def __init__(self, uuid, content, current_pos):
         self.uuid = uuid
         self.content = content
-        self.split_uuid = split_uuid
         now = datetime.now()
         self.created_at = now
         self.updated_at = now
@@ -35,6 +33,7 @@ class tDocuments(db.Model):
 class tSplitUnits(db.Model):
     __tablename__ = 't_split_units'
     uuid = db.Column(db.String(36), primary_key=True)
+    doc_uuid = db.Column(db.String(36), primary_key=False)
     index = db.Column(db.Integer, primary_key=False)
     content = db.Column(db.Text, primary_key=False)
 
@@ -44,36 +43,50 @@ def home():
 
 @app.route('/list')
 def list():
-    docs = db.session.query(tDocuments).query.all()
+    docs = db.session.query(tDocuments).all()
+
+    print(docs)
 
     docObj = {}
-    docObj['doc'] = doc
+    docObj['docs'] = docs
 
     for doc in docs:
         print(doc)
 
-        units = db.session.query(tSplitUnits).get(doc.split_uuid).order_by(tSplitUnits.index)
+        units = db.session.\
+                   query(tSplitUnits).\
+                   filter(tSplitUnits.doc_uuid == doc.uuid).\
+                   order_by(tSplitUnits.index).\
+                   all()
 
         print(units)
         
         docObj['units'] = units
 
-    return render_template('list.html', baseUrl=request.base_url, docList=docObj) 
+    return render_template('list.html', baseUrl=request.base_url, docObj=docObj) 
 
 # uuid 空の場合: 新たな文書を読み込み可能, 空でない場合: 既存の文書のみ
 @app.route('/read/<string:uuid>')
-def read():
+def read(uuid):
     if len(uuid) > 0:
         canInsert = True
             
-        doc = db.session.query(tDocuments).filter(uuid=data.uuid).first()
+        doc = db.session.\
+                 query(tDocuments).\
+                 filter(tDocuments.uuid==data.uuid).\
+                 first()
 
         print(doc)
 
         docObj = {}
         docObj['doc'] = doc
 
-        docObj['units'] = db.session.query(tSplitUnits).get(doc.split_uuid).order_by(tSplitUnits.index)
+        docObj['units'] = db.session.\
+                             query(tSplitUnits).\
+                             filter(tSplitUnits.doc_uuid == doc.uuid).\
+                             order_by(tSplitUnits.index).\
+                             all()
+        
         print(docObj['units'])
     else:
         canInsert = False
@@ -111,15 +124,13 @@ def insert():
     data = request.json
     print(data)
 
-    split_uuid = uuid.uuid4()
-
-    doc = tDocuments(uuid=uuid.uuid4(),content=data.content,split_uuid=split_uuid,current_pos=data.current_pos)
+    doc = tDocuments(uuid=uuid.uuid4(),content=data.content,current_pos=data.current_pos)
     db.session.add(doc)
 
     idx = 0
 
     for unit in data.split_units:
-        unitDoc = tSplitUnits(uuid=uuid, index=idx, content=unit)
+        unitDoc = tSplitUnits(uuid=uuid, doc_uuid=uuid, index=idx, content=unit)
         db.session.add(unitDoc)
         idx += 1
 
@@ -137,7 +148,10 @@ def update():
     data = request.json
     print(data)
 
-    doc = db.session.query(tDocuments).filter(uuid=data.uuid).first()
+    doc = db.session.\
+             query(tDocuments).\
+             filter(tDocuments.uuid==data.uuid).\
+             first()
     doc.current_pos = data.current_pos
 
     db.session.commit()
@@ -154,7 +168,10 @@ def delete():
     data = request.json
     print(data)
 
-    doc = db.session.query(tDocuments).filter(uuid=data.uuid).first()
+    doc = db.session.\
+             query(tDocuments).\
+             filter(tDocuments.uuid==data.uuid).\
+             first()
     db.session.delete(doc)
 
     db.session.commit()
