@@ -67,11 +67,14 @@ def list():
 
     print(docs)
 
-    docObj = {}
+    docsJson = tDocumentsSchema(many=True).dump(docs) 
 
-    docObj['docs'] = docs
+    docList = docs
 
-    return render_template('list.html', baseUrl=request.base_url, docList=docObj, docObj="{}") 
+    docsObj = {}
+    docsObj['docs'] = docsJson
+
+    return render_template('list.html', baseUrl=request.base_url, docList=docList, docObj="{}", docsObj=docsObj) 
 
 # uuid 既存の文書のみ
 @app.route('/doc/<string:uuid>')
@@ -127,7 +130,7 @@ def result():
 
     return jsonify(data)
 
-# content, name, current_pos, split_units
+# required param: content, name, current_pos, split_units
 @app.route('/insert', methods=["POST"])
 def insert():
     if request.headers['Content-Type'] != 'application/json':
@@ -154,7 +157,7 @@ def insert():
 
     return jsonify(success=True)
 
-# uuid, current_pos
+# required param: uuid, current_pos
 @app.route('/update', methods=["POST"])
 def update():
     if request.headers['Content-Type'] != 'application/json':
@@ -174,7 +177,7 @@ def update():
     
     return jsonify(success=True)
 
-# uuid のみ
+# required param: uuid のみ
 @app.route('/delete', methods=["POST"])
 def delete():
     if request.headers['Content-Type'] != 'application/json':

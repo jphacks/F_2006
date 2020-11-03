@@ -292,3 +292,17 @@ function onPosSave() {
 
   fetch(apiUrl, { method: method, headers: headers, body: body });
 }
+
+function summarize(str) {
+  return str.substr(0, 50) + "...";
+}
+
+function formatDate(dateStr) {
+  const index = dateStr.lastIndexOf('+');
+
+  let ret = dateStr.substr(0, index);
+
+  ret = ret.replace('T', ' ');
+
+  return ret;
+}
