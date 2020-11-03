@@ -1,53 +1,55 @@
-window.addEventListener("load", () => {
-	const dropDom = document.getElementById("drop-container");
+if (canInsert) {
+	window.addEventListener("load", () => {
+		const dropDom = document.getElementById("drop-container");
 
-	dropDom.addEventListener(
-		"dragover",
-		(e) => {
-			e.stopPropagation();
-			e.preventDefault();
-		},
-		false
-	);
+		dropDom.addEventListener(
+			"dragover",
+			(e) => {
+				e.stopPropagation();
+				e.preventDefault();
+			},
+			false
+		);
 
-	dropDom.addEventListener(
-		"dragleave",
-		(e) => {
-			e.stopPropagation();
-			e.preventDefault();
-		},
-		false
-	);
+		dropDom.addEventListener(
+			"dragleave",
+			(e) => {
+				e.stopPropagation();
+				e.preventDefault();
+			},
+			false
+		);
 
-	dropDom.addEventListener(
-		"drop",
-		(e) => {
-			e.stopPropagation();
-			e.preventDefault();
+		dropDom.addEventListener(
+			"drop",
+			(e) => {
+				e.stopPropagation();
+				e.preventDefault();
 
-			const files = e.dataTransfer.files;
+				const files = e.dataTransfer.files;
 
-			if (files.length > 1) {
-				return alert("一度にアップロードできるファイルは 1 つだけです");
-			}
+				if (files.length > 1) {
+					return alert("一度にアップロードできるファイルは 1 つだけです");
+				}
 
-			const file = files[0];
+				const file = files[0];
 
-			console.log(file);
+				console.log(file);
 
-			if (file.type === "text/plain") {
-				readTextFile(file);
-			} else if (file.type === "application/pdf") {
-				readPdfFile(file);
-			} else if (file.type.startsWith("image")) {
-				readImgFile(file);
-			} else {
-				return alert("対応していないファイル形式です");
-			}
-		},
-		false
-	);
-});
+				if (file.type === "text/plain") {
+					readTextFile(file);
+				} else if (file.type === "application/pdf") {
+					readPdfFile(file);
+				} else if (file.type.startsWith("image")) {
+					readImgFile(file);
+				} else {
+					return alert("対応していないファイル形式です");
+				}
+			},
+			false
+		);
+	});
+}
 
 function setMainText(text) {
 	const textAreaDom = document.getElementById("main-text");

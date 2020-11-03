@@ -17,6 +17,7 @@ let lastDate = new Date();
 let bgColor = "#fefefe";
 let textColor = "#282828";
 let textSize = 30;
+let lastText = null;
 
 function render() {
   const cvs = document.getElementById("canvas");
@@ -62,7 +63,18 @@ window.addEventListener("load", () => {
 
   onSliderInput(spanMs);
   onTextSliderInput(textSize);
-  onSubmit(initialSentence);
+
+  if (!canInsert) {
+    const invisibleList = ['label-text', 'main-text', 'btn-read-start', 'btn-doc-save'];
+
+    for (let domId of invisibleList)
+      document.getElementById(domId).style.display = 'none';
+
+    texts = docObj.units.map(unit => unit.content);
+    pointer = docObj.doc.current_pos;
+  } else {
+    onSubmit(initialSentence);
+  }
 
   const spans = document.getElementsByClassName("color-box");
 
@@ -93,6 +105,7 @@ function onSubmit(orgText) {
   if (!orgText) {
     const textareaDom = document.getElementById("main-text");
     text = textareaDom.value;
+    lastText = text;
   } else {
     text = orgText;
   }
@@ -136,22 +149,22 @@ function onReset() {
 }
 
 function onBack() {
-	if (spanMs * pointer < 1000) {
-		if (texts.length * spanMs > jumpMs) {
-			pointer = texts.length - (jumpMs / spanMs);
-		} else {
-			pointer = 0;
-		}
-	} else if (spanMs * pointer < jumpMs) {
-		pointer = 0;
-	} else {
-		pointer = pointer - (jumpMs / spanMs);
-	}
+  if (spanMs * pointer < 1000) {
+    if (texts.length * spanMs > jumpMs) {
+      pointer = texts.length - (jumpMs / spanMs);
+    } else {
+      pointer = 0;
+    }
+  } else if (spanMs * pointer < jumpMs) {
+    pointer = 0;
+  } else {
+    pointer = pointer - (jumpMs / spanMs);
+  }
 }
 
 function onSkip() {
-	lastDate = new Date();
-	pointer = (pointer + (jumpMs / spanMs)) % texts.length;
+  lastDate = new Date();
+  pointer = (pointer + (jumpMs / spanMs)) % texts.length;
 }
 
 function setColor(colorBg, colorTxt) {
@@ -166,22 +179,20 @@ function setColor(colorBg, colorTxt) {
     document.getElementById("body").style.color = "#ffffff";
     document.getElementById("col-title").style.borderBottom =
       "1px solid #eeeeee";
-    elements[0].classList.remove("btn-outline-dark");
-    elements[0].classList.add("btn-outline-light");
-    elements[1].classList.remove("btn-outline-dark");
-    elements[1].classList.add("btn-outline-light");
-    elements[2].classList.remove("btn-outline-dark");
-    elements[2].classList.add("btn-outline-light");
+
+    for (let element of elements) {
+      element.classList.remove("btn-outline-dark");
+      element.classList.add("btn-outline-light");
+    }
   } else {
     document.getElementById("body").style.color = "#000000";
     document.getElementById("col-title").style.borderBottom =
       "1px solid #7f7975";
-    elements[0].classList.remove("btn-outline-light");
-    elements[0].classList.add("btn-outline-dark");
-    elements[1].classList.remove("btn-outline-light");
-    elements[1].classList.add("btn-outline-dark");
-    elements[2].classList.remove("btn-outline-light");
-    elements[2].classList.add("btn-outline-dark");
+
+    for (let element of elements) {
+      element.classList.remove("btn-outline-light");
+      element.classList.add("btn-outline-dark");
+    }
   }
 }
 
@@ -191,4 +202,39 @@ function onTextSliderInput(size) {
   const message = "テキストサイズ：" + size + " px";
 
   document.getElementById("text-size").innerText = message;
+}
+
+// content, name, current_pos, split_units
+function onSave() {
+  const apiUrl = baseUrl + "insert";
+
+  // Validation
+  if (!lastText)
+    return alert('テキストを読み上げていません');
+  if (texts.length == 1 && texts[0] === "")
+    return alert('テキストを読み上げていません');
+  if (pointer < 0 || pointer >= texts.length)
+    return alert('エラーが発生しました');
+
+  name = window.prompt('保存する文書の名前を入力してください');
+
+  if (!name || !name.length)
+    return alert('名前が空です');
+
+  const paramObj = {
+    content: lastText,
+    split_units: texts,
+    current_pos: pointer,
+    name: name,
+  };
+  const method = "POST";
+  const headers = {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  };
+  const body = JSON.stringify(paramObj);
+
+  console.log("onSave");
+
+  fetch(apiUrl, { method: method, headers: headers, body: body });
 }

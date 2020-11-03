@@ -6,6 +6,9 @@ from datetime import datetime
 import uuid
 import morph
 from flask_sqlalchemy import SQLAlchemy
+from flask_marshmallow import Marshmallow
+from flask_marshmallow.fields import fields
+import urllib.parse
 
 app = Flask(__name__)
 CORS(app)
@@ -17,18 +20,30 @@ db = SQLAlchemy(app)
 class tDocuments(db.Model):
     __tablename__ = 't_documents'
     uuid = db.Column(db.String(36), primary_key=True)
+    name = db.Column(db.Text, primary_key=False)
     content = db.Column(db.Text, primary_key=False)
     current_pos = db.Column(db.Integer, primary_key=False)
     created_at = db.Column(db.DateTime(), primary_key=True)
     updated_at = db.Column(db.DateTime(), primary_key=True)
 
-    def __init__(self, uuid, content, current_pos):
+    def __init__(self, uuid, name, content, current_pos):
         self.uuid = uuid
+        self.name = name
         self.content = content
         now = datetime.now()
         self.created_at = now
         self.updated_at = now
         self.current_pos = current_pos
+
+ma = Marshmallow(app)
+
+class tDocumentsSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = tDocuments
+        load_instance = True
+    
+    created_at = fields.DateTime('%Y-%m-%dT%H:%M:%S+09:00')
+    updated_at = fields.DateTime('%Y-%m-%dT%H:%M:%S+09:00')
 
 class tSplitUnits(db.Model):
     __tablename__ = 't_split_units'
@@ -37,6 +52,11 @@ class tSplitUnits(db.Model):
     index = db.Column(db.Integer, primary_key=False)
     content = db.Column(db.Text, primary_key=False)
 
+class tSplitUnitsSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = tSplitUnits
+        load_instance = True
+    
 @app.route('/')
 def home():
     return render_template('home.html', baseUrl=request.base_url) 
@@ -48,51 +68,44 @@ def list():
     print(docs)
 
     docObj = {}
+
     docObj['docs'] = docs
 
-    for doc in docs:
-        print(doc)
+    return render_template('list.html', baseUrl=request.base_url, docList=docObj, docObj="{}") 
 
-        units = db.session.\
-                   query(tSplitUnits).\
-                   filter(tSplitUnits.doc_uuid == doc.uuid).\
-                   order_by(tSplitUnits.index).\
-                   all()
+# uuid 既存の文書のみ
+@app.route('/doc/<string:uuid>')
+def doc(uuid):
+    doc = db.session.\
+                query(tDocuments).\
+                filter(tDocuments.uuid==uuid).\
+                first()
 
-        print(units)
-        
-        docObj['units'] = units
+    print(doc)
 
-    return render_template('list.html', baseUrl=request.base_url, docObj=docObj) 
+    docJson = tDocumentsSchema().dump(doc)
+    print(docJson)
 
-# uuid 空の場合: 新たな文書を読み込み可能, 空でない場合: 既存の文書のみ
-@app.route('/read/<string:uuid>')
-def read(uuid):
-    if len(uuid) > 0:
-        canInsert = True
-            
-        doc = db.session.\
-                 query(tDocuments).\
-                 filter(tDocuments.uuid==data.uuid).\
-                 first()
+    docObj = {}
+    docObj['doc'] = docJson
 
-        print(doc)
+    units = db.session.\
+               query(tSplitUnits).\
+               filter(tSplitUnits.doc_uuid == doc.uuid).\
+               order_by(tSplitUnits.index).\
+               all()
+    
+    unitsJson = tSplitUnitsSchema(many=True).dump(units)
 
-        docObj = {}
-        docObj['doc'] = doc
+    print(unitsJson)
 
-        docObj['units'] = db.session.\
-                             query(tSplitUnits).\
-                             filter(tSplitUnits.doc_uuid == doc.uuid).\
-                             order_by(tSplitUnits.index).\
-                             all()
-        
-        print(docObj['units'])
-    else:
-        canInsert = False
-        docObj = {}
+    docObj['units'] = unitsJson
 
-    return render_template('index.html', baseUrl=request.base_url, canInsert=canInsert, doc=docObj)
+    return render_template('index.html', baseUrl=request.base_url, canInsert=False, docObj=docObj)
+
+@app.route('/read')
+def read():
+    return render_template('index.html', baseUrl=request.base_url, canInsert=True, docObj="{}")
 
 @app.route('/result', methods=["POST"])
 def result():
@@ -114,7 +127,7 @@ def result():
 
     return jsonify(data)
 
-# content, current_pos, split_units
+# content, name, current_pos, split_units
 @app.route('/insert', methods=["POST"])
 def insert():
     if request.headers['Content-Type'] != 'application/json':
@@ -124,19 +137,22 @@ def insert():
     data = request.json
     print(data)
 
-    doc = tDocuments(uuid=uuid.uuid4(),content=data.content,current_pos=data.current_pos)
+    docUuid = uuid.uuid4()
+
+    doc = tDocuments(uuid=docUuid,content=data['content'], name=data['name'],current_pos=data['current_pos'])
     db.session.add(doc)
 
     idx = 0
 
-    for unit in data.split_units:
-        unitDoc = tSplitUnits(uuid=uuid, doc_uuid=uuid, index=idx, content=unit)
+    for unit in data['split_units']:
+        unitUuid = uuid.uuid4()
+        unitDoc = tSplitUnits(uuid=unitUuid, doc_uuid=docUuid, index=idx, content=unit)
         db.session.add(unitDoc)
         idx += 1
 
     db.session.commit()
 
-    return
+    return jsonify(success=True)
 
 # uuid, current_pos
 @app.route('/update', methods=["POST"])
@@ -150,13 +166,13 @@ def update():
 
     doc = db.session.\
              query(tDocuments).\
-             filter(tDocuments.uuid==data.uuid).\
+             filter(tDocuments.uuid==data['uuid']).\
              first()
-    doc.current_pos = data.current_pos
+    doc.current_pos = data['current_pos']
 
     db.session.commit()
     
-    return
+    return jsonify(success=True)
 
 # uuid のみ
 @app.route('/delete', methods=["POST"])
@@ -170,13 +186,13 @@ def delete():
 
     doc = db.session.\
              query(tDocuments).\
-             filter(tDocuments.uuid==data.uuid).\
+             filter(tDocuments.uuid==data['uuid']).\
              first()
     db.session.delete(doc)
 
     db.session.commit()
     
-    return
+    return jsonify(success=True)
 
 #おまじない
 if __name__ == '__main__':
