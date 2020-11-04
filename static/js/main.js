@@ -38,6 +38,8 @@ function render() {
 
 	ctx.fillText(texts[pointer], scrW / 2, 100 + (textSize / 2));
 
+	ctx.font = "normal 30px 'Yu Gothic'";
+
 	let nowDate = new Date();
 
 	if (nowDate - lastDate >= spanMs && isParse == false) {

@@ -64,6 +64,8 @@ function renderLyrics(cvs, ctx, scrW, scrH, texts, pointer, textColor, bgColor) 
 
   for (let i = 0; i < texts.length; ++i) {
     const text = texts[i];
+    ctx.font = "normal 30px 'Yu Gothic'";
+    ctx.textAlign = "left";
     const metrics = ctx.measureText(text);
 
     if (col + metrics.width > width || text === '\n') {
