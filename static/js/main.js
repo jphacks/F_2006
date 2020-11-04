@@ -26,11 +26,14 @@ function render() {
 	const scrH = parseInt(cvs.style.height.slice(0, -2));
 
 	ctx.clearRect(0, 0, scrW, scrH);
+
+	renderLyrics(cvs, ctx, scrW, scrH, texts, pointer, textColor, bgColor);
+
 	ctx.font = "normal " + textSize + "px 'Yu Gothic'";
 	ctx.fillStyle = textColor;
 	ctx.textAlign = "center";
 
-	ctx.fillText(texts[pointer], scrW / 2, scrH / 2 + (textSize / 2));
+	ctx.fillText(texts[pointer], scrW / 2, 100 + (textSize / 2));
 
 	let nowDate = new Date();
 
@@ -84,6 +87,7 @@ window.addEventListener("load", () => {
 			document.getElementById(domId).style.display = 'none';
 
 		texts = docObj.units.map(unit => unit.content);
+		initAlpha(texts);
 		pointer = docObj.doc.current_pos;
 	} else {
 		const invisibleList = ['btn-pos-save'];
@@ -144,6 +148,7 @@ async function onSubmit(orgText) {
 	const res = await response.json();
 
 	texts = res.text;
+	initAlpha(texts);
 	console.log(res.text);
 	pointer = 0;
 }
