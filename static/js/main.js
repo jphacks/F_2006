@@ -220,6 +220,8 @@ function onSave() {
     return alert('テキストを読み上げていません');
   if (pointer < 0 || pointer >= texts.length)
     return alert('エラーが発生しました');
+  if (texts.length > 1000)
+    return alert('文書が長すぎます');
 
   name = window.prompt('保存する文書の名前を入力してください');
 
