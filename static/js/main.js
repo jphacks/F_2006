@@ -302,7 +302,7 @@ function onPosSave() {
 }
 
 function summarize(str) {
-  return str.substr(0, 50) + "...";
+  return str.substr(0, 140) + "...";
 }
 
 function formatDate(dateStr) {
