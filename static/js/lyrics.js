@@ -8,10 +8,28 @@ let rows = [0];
 
 let lyricsLoaded = false;
 
-function initLyrics(ctx, scrW, texts) {
+function initLyrics(ctx) {
+  alphas = [];
+  toAlphas = [];
+
+  for (let i = 0; i < texts.length; ++i) {
+    alphas.push(alphaBack);
+    toAlphas.push(alphaBack);
+  }
+
+  lyricsLoaded = true;
+}
+
+let baseRow = 0;
+
+function renderLyrics(cvs, ctx, scrW, scrH, texts, pointer, textColor, bgColor) {
+  if (!lyricsLoaded)
+    return;
+
   let col = 0;
   let row = 0;
 
+  const ox = scrW / 6;
   const width = scrW / 3 * 2;
 
   focusRows = [];
@@ -39,28 +57,8 @@ function initLyrics(ctx, scrW, texts) {
     focusRows.push(rows.length - 1);
   }
 
-  alphas = [];
-  toAlphas = [];
-
-  for (let i = 0; i < texts.length; ++i) {
-    alphas.push(alphaBack);
-    toAlphas.push(alphaBack);
-  }
-
-  lyricsLoaded = true;
-}
-
-let baseRow = 0;
-
-function renderLyrics(cvs, ctx, scrW, scrH, texts, pointer, textColor, bgColor) {
-  if (!lyricsLoaded)
-    return;
-
-  let col = 0;
-  let row = 0;
-
-  const ox = scrW / 6;
-  const width = scrW / 3 * 2;
+  col = 0;
+  row = 0;
 
   for (let i = 0; i < texts.length; ++i) {
     const text = texts[i];

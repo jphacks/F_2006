@@ -92,7 +92,7 @@ window.addEventListener("load", () => {
 			document.getElementById(domId).style.display = 'none';
 
 		texts = docObj.units.map(unit => unit.content);
-		initLyrics(ctx, scrW, texts);
+		initLyrics(ctx);
 		pointer = docObj.doc.current_pos;
 	} else {
 		const invisibleList = ['btn-pos-save'];
@@ -153,7 +153,7 @@ async function onSubmit(orgText) {
 	const res = await response.json();
 
 	texts = res.text;
-	initLyrics(ctx, scrW, texts);
+	initLyrics(ctx);
 	console.log(res.text);
 	pointer = 0;
 }
