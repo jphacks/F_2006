@@ -1,0 +1,61 @@
+{% extends "layout.html" %} {% block content %}
+
+<!--ナビゲーションバー-->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02"
+    aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand text-monospace" style="pointer-events: none">Flash Reading</a>
+
+  <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+    <ul class="navbar-nav mr-auto mt-2 mt-md-0">
+      <li class="nav-item">
+        <a class="nav-link" href="{{url_for('home')}}">説明 </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{url_for('read')}}">Try！</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="{{url_for('list')}}">保存した文書</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+<script>
+  let docIndex = 0;
+
+  const docsObj = {{ docsObj | tojson | safe }};
+</script>
+<div class="container" style="letter-spacing: 0.08em" 　>
+  <ul class="list-group" style="margin-top: 30px">
+    {% for doc in docList %}
+    <li class="list-group-item">
+      <h3>文書名: {{doc.name}}</h3>
+      <h3 id="content-{{doc.uuid}}"></h3>
+      <h3>位置: {{doc.current_pos}}</h3>
+      <h3 id="created-at-{{doc.uuid}}"></h3>
+      <h3 id="updated-at-{{doc.uuid}}"></h3>
+      <a href="{{url_for('doc', uuid=doc.uuid)}}" class="btn btn-dark text-center" style="margin-top: 10px">文書を読む</a>
+      <br/>
+      <br/>
+      <button onclick="onDelete('{{doc.uuid}}')" class="btn btn-dark text-center">文書を削除</button>
+    </li>
+    <script>
+      {
+        const docObj = docsObj.docs[docIndex];
+
+        const dispContent = summarize(docObj.content);
+        const dispCreatedAt = formatDate(docObj.created_at);
+        const dispUpdatedAt = formatDate(docObj.updated_at);
+
+        document.getElementById('content-' + docObj.uuid).innerText = "本文: " + dispContent;
+        document.getElementById('created-at-' + docObj.uuid).innerText = "作成日時: " + dispCreatedAt;
+        document.getElementById('updated-at-' + docObj.uuid).innerText = "更新日時: " + dispUpdatedAt;
+
+        docIndex += 1;
+      }
+    </script> {% endfor %}
+  </ul>
+</div>
+{% endblock %}
