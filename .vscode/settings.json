@@ -1,0 +1,19 @@
+{
+  "git.ignoreMissingGitWarning": true,
+  "window.zoomLevel": 0,
+  "editor.tabSize": 2,
+  // Set the default,
+  "editor.formatOnSave": true,
+  // Enable per-language
+  "[cpp]": {
+    "editor.formatOnSave": false
+  },
+  "files.autoSave": "onFocusChange",
+  "prettier.tabWidth": 2,
+  "prettier.useTabs": true,
+  "prettier.vueIndentScriptAndStyle": true,
+  "prettier.ignorePath": ".prettierignore ",
+  "prettier.disableLanguages": [
+    "markdown"
+  ]
+}
