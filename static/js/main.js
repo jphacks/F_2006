@@ -19,10 +19,13 @@ let textColor = "#282828";
 let textSize = 30;
 let lastText = null;
 
+let ctx;
+let scrW;
+
 function render() {
 	const cvs = document.getElementById("canvas");
-	const ctx = cvs.getContext("2d");
-	const scrW = parseInt(cvs.style.width.slice(0, -2));
+	ctx = cvs.getContext("2d");
+	scrW = parseInt(cvs.style.width.slice(0, -2));
 	const scrH = parseInt(cvs.style.height.slice(0, -2));
 
 	ctx.clearRect(0, 0, scrW, scrH);
@@ -87,7 +90,7 @@ window.addEventListener("load", () => {
 			document.getElementById(domId).style.display = 'none';
 
 		texts = docObj.units.map(unit => unit.content);
-		initAlpha(texts);
+		initLyrics(ctx, scrW, texts);
 		pointer = docObj.doc.current_pos;
 	} else {
 		const invisibleList = ['btn-pos-save'];
@@ -148,7 +151,7 @@ async function onSubmit(orgText) {
 	const res = await response.json();
 
 	texts = res.text;
-	initAlpha(texts);
+	initLyrics(ctx, scrW, texts);
 	console.log(res.text);
 	pointer = 0;
 }

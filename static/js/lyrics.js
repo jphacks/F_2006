@@ -3,27 +3,19 @@ const alphaBack = 0.2, alphaFocus = 1.0;
 let alphas = [];
 let toAlphas = [];
 
-function initAlpha(texts) {
-  alphas = [];
-  toAlphas = [];
+let focusRows = [];
+let rows = [0];
 
-  for (let i = 0; i < texts.length; ++i) {
-    alphas.push(alphaBack);
-    toAlphas.push(alphaBack);
-  }
-}
+let lyricsLoaded = false;
 
-let baseRow = 0;
-
-function renderLyrics(cvs, ctx, scrW, scrH, texts, pointer, textColor, bgColor) {
+function initLyrics(ctx, scrW, texts) {
   let col = 0;
   let row = 0;
 
-  const ox = scrW / 6;
   const width = scrW / 3 * 2;
 
-  let focusRow;
-  let rows = [0];
+  focusRows = [];
+  rows = [0];
 
   for (let i = 0; i < texts.length; ++i) {
     const text = texts[i];
@@ -44,13 +36,31 @@ function renderLyrics(cvs, ctx, scrW, scrH, texts, pointer, textColor, bgColor) 
       continue;
     }
 
-    if (pointer == i) {
-      focusRow = rows.length - 1;
-    }
+    focusRows.push(rows.length - 1);
   }
 
-  col = 0;
-  row = 0;
+  alphas = [];
+  toAlphas = [];
+
+  for (let i = 0; i < texts.length; ++i) {
+    alphas.push(alphaBack);
+    toAlphas.push(alphaBack);
+  }
+
+  lyricsLoaded = true;
+}
+
+let baseRow = 0;
+
+function renderLyrics(cvs, ctx, scrW, scrH, texts, pointer, textColor, bgColor) {
+  if (!lyricsLoaded)
+    return;
+
+  let col = 0;
+  let row = 0;
+
+  const ox = scrW / 6;
+  const width = scrW / 3 * 2;
 
   for (let i = 0; i < texts.length; ++i) {
     const text = texts[i];
@@ -66,7 +76,7 @@ function renderLyrics(cvs, ctx, scrW, scrH, texts, pointer, textColor, bgColor) 
       continue;
     }
 
-    if (Math.abs(rows.indexOf(row) - focusRow) <= 2) {
+    if (Math.abs(rows.indexOf(row) - focusRows[pointer]) <= 2) {
       ctx.font = "normal 30px 'Yu Gothic'";
       ctx.fillStyle = hex2rgba(textColor, alphas[i]);
       ctx.textAlign = "left";
@@ -80,7 +90,13 @@ function renderLyrics(cvs, ctx, scrW, scrH, texts, pointer, textColor, bgColor) 
   ctx.fillRect(ox, 250 + 15, width, 100);
   ctx.fillRect(ox, 0, width, 220 - 15 - 45);
 
-  baseRow = morph(baseRow, rows[focusRow], 20);
+  baseRow = morph(baseRow, rows[focusRows[pointer]], 20);
+
+  if (!pointer) {
+    baseRow = morph(baseRow, rows[0], 2);
+    //baseRow = rows[0];
+  }
+
   alphaTimeStep(alphas, toAlphas, texts, pointer);
 }
 
