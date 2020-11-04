@@ -22,8 +22,8 @@ let lastText = null;
 function render() {
 	const cvs = document.getElementById("canvas");
 	const ctx = cvs.getContext("2d");
-	const scrW = cvs.width;
-	const scrH = cvs.height;
+	const scrW = parseInt(cvs.style.width.slice(0, -2));
+	const scrH = parseInt(cvs.style.height.slice(0, -2));
 
 	ctx.clearRect(0, 0, scrW, scrH);
 	ctx.font = "normal " + textSize + "px 'Yu Gothic'";
@@ -45,12 +45,25 @@ function render() {
 window.addEventListener("load", () => {
 	sizing();
 
+	//cvs.scale(3, 3);
+
 	function sizing() {
 		let cvs = document.getElementById("canvas");
+		let ctx = cvs.getContext('2d');
 		let cntr = document.getElementById("container");
 
-		cvs.height = cntr.offsetHeight;
-		cvs.width = cntr.offsetWidth;
+		const dpr = window.devicePixelRatio || 1;
+
+		const width = cntr.offsetWidth;
+		const height = cntr.offsetHeight;
+
+		cvs.width = width * dpr;
+		cvs.height = height * dpr;
+
+		ctx.scale(dpr, dpr);
+
+		cvs.style.width = width + 'px';
+		cvs.style.height = height + 'px';
 	}
 
 	window.addEventListener("resize", function () {
