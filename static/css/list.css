@@ -21,12 +21,51 @@
 	right: 7px;
 }
 .creup-day {
-	display: flex;
-	justify-content: flex-end;
-	align-items: center;
 	list-style: none;
+	text-align: left;
 }
 
-li {
-	padding-right: 30px;
+.creup-day {
+	padding-left: 0px;
+	margin-left: 0.5em;
+}
+
+/* .creup-day li {
+	padding-right: 0.4em;
+} */
+
+/* 793px以上に適用されるCSS */
+@media screen and (min-width: 793px) {
+	#list-title {
+		position: relative;
+		padding: 0.25em 1em;
+		border-top: solid 2px black;
+		border-bottom: solid 2px black;
+	}
+	#list-title:before,
+	#list-title:after {
+		content: "";
+		position: absolute;
+		top: -7px;
+		width: 2px;
+		height: -webkit-calc(100% + 14px);
+		height: calc(100% + 14px);
+		background-color: black;
+	}
+	#list-title:before {
+		left: 7px;
+	}
+	#list-title:after {
+		right: 7px;
+	}
+	.creup-day {
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+		list-style: none;
+	}
+
+	.creup-day li {
+		padding-right: 0.4em;
+	}
 }
