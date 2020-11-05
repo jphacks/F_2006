@@ -37,9 +37,8 @@ function render() {
 	ctx.textAlign = "center";
 
 	if (isParse)
-		ctx.fillText("[再生/一時停止]で開始", scrW / 2, 100 + (textSize / 2));
-	else ctx.fillText(texts[pointer], scrW / 2, 100 + (textSize / 2));
-
+		ctx.fillText("[再生/一時停止]で開始", scrW / 2, 100 + textSize / 2);
+	else ctx.fillText(texts[pointer], scrW / 2, 100 + textSize / 2);
 
 	ctx.font = "normal 30px 'Yu Gothic'";
 
@@ -60,7 +59,7 @@ window.addEventListener("load", () => {
 
 	function sizing() {
 		let cvs = document.getElementById("canvas");
-		let ctx = cvs.getContext('2d');
+		let ctx = cvs.getContext("2d");
 		let cntr = document.getElementById("container");
 
 		const dpr = window.devicePixelRatio || 1;
@@ -73,8 +72,8 @@ window.addEventListener("load", () => {
 
 		ctx.scale(dpr, dpr);
 
-		cvs.style.width = width + 'px';
-		cvs.style.height = height + 'px';
+		cvs.style.width = width + "px";
+		cvs.style.height = height + "px";
 	}
 
 	window.addEventListener("resize", function () {
@@ -89,19 +88,24 @@ window.addEventListener("load", () => {
 	onTextSliderInput(textSize);
 
 	if (!canInsert) {
-		const invisibleList = ['label-text', 'main-text', 'btn-read-start', 'btn-doc-save'];
+		const invisibleList = [
+			"label-text",
+			"main-text",
+			"btn-read-start",
+			"btn-doc-save",
+		];
 
 		for (let domId of invisibleList)
-			document.getElementById(domId).style.display = 'none';
+			document.getElementById(domId).style.display = "none";
 
-		texts = docObj.units.map(unit => unit.content);
+		texts = docObj.units.map((unit) => unit.content);
 		initLyrics(ctx);
 		pointer = docObj.doc.current_pos;
 	} else {
-		const invisibleList = ['btn-pos-save'];
+		const invisibleList = ["btn-pos-save"];
 
 		for (let domId of invisibleList)
-			document.getElementById(domId).style.display = 'none';
+			document.getElementById(domId).style.display = "none";
 
 		isInitial = true;
 		onSubmit(initialSentence);
@@ -153,17 +157,19 @@ async function onSubmit(orgText) {
 
 	console.log("onSubmit");
 
-	const response = await fetch(apiUrl, { method: method, headers: headers, body: body });
+	const response = await fetch(apiUrl, {
+		method: method,
+		headers: headers,
+		body: body,
+	});
 	const res = await response.json();
 
 	texts = res.text;
 	initLyrics(ctx);
 	console.log(res.text);
 	pointer = 0;
-	if (isInitial)
-		isInitial = false;
-	else
-		isParse = true;
+	if (isInitial) isInitial = false;
+	else isParse = true;
 }
 
 function onParse() {
@@ -248,8 +254,7 @@ async function onSave() {
 		const textareaDom = document.getElementById("main-text");
 		const text = textareaDom.value;
 
-		if (!text)
-			return alert('テキストが入力されていません');
+		if (!text) return alert("テキストが入力されていません");
 
 		if (text.length > 4000)
 			return alert('文書が長すぎます');
@@ -263,16 +268,15 @@ async function onSave() {
 		console.log("ended");
 	}
 	if (texts.length == 1 && texts[0] === "")
-		return alert('エラーが発生しました');
+		return alert("エラーが発生しました");
 	if (pointer < 0 || pointer >= texts.length)
-		return alert('エラーが発生しました');
-	if (texts.length > 1000)
-		return alert('文書が長すぎます');
+		return alert("エラーが発生しました");
+	if (texts.length > 1000) return alert("文書が長すぎます");
 
-	if (!(name = window.prompt('保存する文書の名前を入力してください'))) {
+	if (!(name = window.prompt("保存する文書の名前を入力してください"))) {
 		lastText = prevText;
 
-		return alert('名前が空です');
+		return alert("名前が空です");
 	}
 
 	if (name && name.length) {
@@ -293,13 +297,15 @@ async function onSave() {
 
 		console.log("onSave");
 
-		await fetch(apiUrl, { method: method, headers: headers, body: body }).then(_ => {
-			window.location.href = baseUrl + 'list';
-		});
+		await fetch(apiUrl, { method: method, headers: headers, body: body }).then(
+			(_) => {
+				window.location.href = baseUrl + "list";
+			}
+		);
 	} else {
 		lastText = prevText;
 
-		return alert('名前が空です');
+		return alert("名前が空です");
 	}
 }
 
@@ -308,8 +314,7 @@ function onDelete(uuid) {
 	const apiUrl = baseUrl + "delete";
 
 	// Validation
-	if (!uuid)
-		return alert("エラーが発生しました");
+	if (!uuid) return alert("エラーが発生しました");
 
 	const paramObj = {
 		uuid: uuid,
@@ -323,7 +328,7 @@ function onDelete(uuid) {
 
 	console.log("onDelete");
 
-	fetch(apiUrl, { method: method, headers: headers, body: body }).then(_ => {
+	fetch(apiUrl, { method: method, headers: headers, body: body }).then((_) => {
 		location.reload();
 	});
 }
@@ -333,8 +338,7 @@ function onPosSave() {
 	const apiUrl = baseUrl + "update";
 
 	// Validation
-	if (!docObj.doc.uuid)
-		return alert("エラーが発生しました");
+	if (!docObj.doc.uuid) return alert("エラーが発生しました");
 	if (pointer < 0 || pointer >= texts.length)
 		return alert("エラーが発生しました");
 
@@ -351,8 +355,8 @@ function onPosSave() {
 
 	console.log("onPosSave");
 
-	fetch(apiUrl, { method: method, headers: headers, body: body }).then(_ => {
-		window.location.href = baseUrl + 'list';
+	fetch(apiUrl, { method: method, headers: headers, body: body }).then((_) => {
+		window.location.href = baseUrl + "list";
 	});
 }
 
@@ -361,11 +365,11 @@ function summarize(str) {
 }
 
 function formatDate(dateStr) {
-	const index = dateStr.lastIndexOf('+');
+	const index = dateStr.lastIndexOf("+");
 
 	let ret = dateStr.substr(0, index);
 
-	ret = ret.replace('T', ' ');
+	ret = ret.replace("T", " ");
 
 	return ret;
 }
