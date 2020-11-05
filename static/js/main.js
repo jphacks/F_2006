@@ -103,7 +103,7 @@ window.addEventListener("load", () => {
 			document.getElementById(domId).style.display = "none";
 
 		texts = docObj.units.map((unit) => unit.content);
-		initLyrics(ctx);
+		initLyrics();
 		pointer = docObj.doc.current_pos;
 	} else {
 		const invisibleList = ["btn-pos-save"];
@@ -174,11 +174,9 @@ async function onSubmit(orgText) {
 	const res = await response.json();
 
 	texts = res.text;
-	initLyrics(ctx);
+	initLyrics();
 	console.log(res.text);
 	pointer = 0;
-	if (isInitial) isInitial = false;
-	else isParse = true;
 
 	isLoad = false;
 }

@@ -8,24 +8,13 @@ let rows = [0];
 
 let lyricsLoaded = false;
 
-function initLyrics(ctx) {
-  alphas = [];
-  toAlphas = [];
-
-  for (let i = 0; i < texts.length; ++i) {
-    alphas.push(alphaBack);
-    toAlphas.push(alphaBack);
-  }
-
-  lyricsLoaded = true;
-}
-
 let baseRow = 0;
 
-function renderLyrics(cvs, ctx, scrW, scrH, txts, pointer, textColor, bgColor) {
-  if (!lyricsLoaded)
-    return;
+function initLyrics() {
+  lyricsLoaded = false;
+}
 
+function renderLyrics(cvs, ctx, scrW, scrH, txts, pointer, textColor, bgColor) {
   let texts = [];
   let idxMap = [];
 
@@ -47,6 +36,18 @@ function renderLyrics(cvs, ctx, scrW, scrH, txts, pointer, textColor, bgColor) {
 
   idxMap.push(texts.length);
   texts.push(txts[txts.length - 1]);
+
+  if (!lyricsLoaded) {
+    alphas = [];
+    toAlphas = [];
+
+    for (let i = 0; i < texts.length; ++i) {
+      alphas.push(alphaBack);
+      toAlphas.push(alphaBack);
+    }
+
+    lyricsLoaded = true;
+  }
 
   let col = 0;
   let row = 0;
@@ -124,14 +125,17 @@ function renderLyrics(cvs, ctx, scrW, scrH, txts, pointer, textColor, bgColor) {
   if (isNaN(baseRow))
     baseRow = 0;
 
+  console.log("pointer");
+  console.log(pointer, idxMap[pointer]);
+
   alphaTimeStep(alphas, toAlphas, texts, idxMap[pointer]);
 }
 
-function alphaTimeStep(alphas, toAlphas, texts, pointer) {
+function alphaTimeStep(alphas, toAlphas, texts, index) {
   for (let i = 0; i < texts.length; ++i) {
     alphas[i] = morph(alphas[i], toAlphas[i], 5);
 
-    toAlphas[i] = i == pointer ? alphaFocus : alphaBack;
+    toAlphas[i] = i == index ? alphaFocus : alphaBack;
   }
 }
 
