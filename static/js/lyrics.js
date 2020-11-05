@@ -37,7 +37,7 @@ function renderLyrics(cvs, ctx, scrW, scrH, texts, pointer, textColor, bgColor) 
 
   for (let i = 0; i < texts.length; ++i) {
     const text = texts[i];
-    ctx.font = "normal 30px 'Yu Gothic'";
+    ctx.font = "normal 20px 'Yu Gothic'";
     ctx.textAlign = "left";
     const metrics = ctx.measureText(text);
 
@@ -62,7 +62,7 @@ function renderLyrics(cvs, ctx, scrW, scrH, texts, pointer, textColor, bgColor) 
 
   for (let i = 0; i < texts.length; ++i) {
     const text = texts[i];
-    ctx.font = "normal 30px 'Yu Gothic'";
+    ctx.font = "normal 20px 'Yu Gothic'";
     ctx.textAlign = "left";
     const metrics = ctx.measureText(text);
 
@@ -77,7 +77,7 @@ function renderLyrics(cvs, ctx, scrW, scrH, texts, pointer, textColor, bgColor) 
     }
 
     if (Math.abs(rows.indexOf(row) - focusRows[pointer]) <= 2) {
-      ctx.font = "normal 30px 'Yu Gothic'";
+      ctx.font = "normal 20px 'Yu Gothic'";
       ctx.fillStyle = hex2rgba(textColor, alphas[i]);
       ctx.textAlign = "left";
       ctx.fillText(text, ox + col, row - baseRow + 220);

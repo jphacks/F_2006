@@ -11,7 +11,7 @@ let spanMs = 250;
 let jumpMs = 3000;
 
 let isParse = false;
-
+let isInitial = false;
 let lastDate = new Date();
 
 let bgColor = "#fefefe";
@@ -36,7 +36,10 @@ function render() {
 	ctx.fillStyle = textColor;
 	ctx.textAlign = "center";
 
-	ctx.fillText(texts[pointer], scrW / 2, 100 + (textSize / 2));
+	if (isParse)
+		ctx.fillText("[再生/一時停止]で開始", scrW / 2, 100 + (textSize / 2));
+	else ctx.fillText(texts[pointer], scrW / 2, 100 + (textSize / 2));
+
 
 	ctx.font = "normal 30px 'Yu Gothic'";
 
@@ -100,6 +103,7 @@ window.addEventListener("load", () => {
 		for (let domId of invisibleList)
 			document.getElementById(domId).style.display = 'none';
 
+		isInitial = true;
 		onSubmit(initialSentence);
 	}
 
@@ -156,6 +160,10 @@ async function onSubmit(orgText) {
 	initLyrics(ctx);
 	console.log(res.text);
 	pointer = 0;
+	if (isInitial)
+		isInitial = false;
+	else
+		isParse = true;
 }
 
 function onParse() {
