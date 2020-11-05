@@ -1,0 +1,32 @@
+#list-title {
+	position: relative;
+	padding: 0.25em 1em;
+	border-top: solid 2px black;
+	border-bottom: solid 2px black;
+}
+#list-title:before,
+#list-title:after {
+	content: "";
+	position: absolute;
+	top: -7px;
+	width: 2px;
+	height: -webkit-calc(100% + 14px);
+	height: calc(100% + 14px);
+	background-color: black;
+}
+#list-title:before {
+	left: 7px;
+}
+#list-title:after {
+	right: 7px;
+}
+.creup-day {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	list-style: none;
+}
+
+li {
+	padding-right: 30px;
+}
