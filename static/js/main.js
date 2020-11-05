@@ -11,7 +11,7 @@ let spanMs = 250;
 let jumpMs = 3000;
 
 let isParse = false;
-
+let isInitial = false;
 let lastDate = new Date();
 
 let bgColor = "#fefefe";
@@ -19,18 +19,29 @@ let textColor = "#282828";
 let textSize = 30;
 let lastText = null;
 
+let ctx;
+let scrW;
+
 function render() {
 	const cvs = document.getElementById("canvas");
-	const ctx = cvs.getContext("2d");
-	const scrW = parseInt(cvs.style.width.slice(0, -2));
+	ctx = cvs.getContext("2d");
+	scrW = parseInt(cvs.style.width.slice(0, -2));
 	const scrH = parseInt(cvs.style.height.slice(0, -2));
 
 	ctx.clearRect(0, 0, scrW, scrH);
+
+	renderLyrics(cvs, ctx, scrW, scrH, texts, pointer, textColor, bgColor);
+
 	ctx.font = "normal " + textSize + "px 'Yu Gothic'";
 	ctx.fillStyle = textColor;
 	ctx.textAlign = "center";
 
-	ctx.fillText(texts[pointer], scrW / 2, scrH / 2 + (textSize / 2));
+	if (isParse)
+		ctx.fillText("[再生/一時停止]で開始", scrW / 2, 100 + (textSize / 2));
+	else ctx.fillText(texts[pointer], scrW / 2, 100 + (textSize / 2));
+
+
+	ctx.font = "normal 30px 'Yu Gothic'";
 
 	let nowDate = new Date();
 
@@ -84,6 +95,7 @@ window.addEventListener("load", () => {
 			document.getElementById(domId).style.display = 'none';
 
 		texts = docObj.units.map(unit => unit.content);
+		initLyrics(ctx);
 		pointer = docObj.doc.current_pos;
 	} else {
 		const invisibleList = ['btn-pos-save'];
@@ -91,6 +103,7 @@ window.addEventListener("load", () => {
 		for (let domId of invisibleList)
 			document.getElementById(domId).style.display = 'none';
 
+		isInitial = true;
 		onSubmit(initialSentence);
 	}
 
@@ -144,8 +157,13 @@ async function onSubmit(orgText) {
 	const res = await response.json();
 
 	texts = res.text;
+	initLyrics(ctx);
 	console.log(res.text);
 	pointer = 0;
+	if (isInitial)
+		isInitial = false;
+	else
+		isParse = true;
 }
 
 function onParse() {

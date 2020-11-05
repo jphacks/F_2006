@@ -24,7 +24,7 @@
 </nav>
 
 <div id="drop-container">
-	<div id="container" style="width: 100%; height: 200px">
+	<div id="container" style="width: 100%; height: 290px">
 		<canvas id="canvas"></canvas>
 	</div>
 
@@ -36,25 +36,25 @@
 		<textarea id="main-text"></textarea>
 		<br />
 		<button onclick="onSubmit()" class="btn btn-outline-dark btn-col" id="btn-read-start">
-			読み上げ開始
-		</button>
-		<button onclick="onParse()" class="btn btn-outline-dark btn-col">
-			一時停止/再開
-		</button>
-		<button onclick="onReset()" class="btn btn-outline-dark btn-col">
-			文章の初めに戻る</button>
-		<br />
-		<button onclick="onBack()" class="btn btn-outline-dark btn-col">
-			3秒戻す
-		</button>
-		<button onclick="onSkip()" class="btn btn-outline-dark btn-col">
-			3秒進める
+			テキストボックス読み込み
 		</button>
 		<button onclick="onSave()" id="btn-doc-save" class="btn btn-outline-dark btn-col">
 			文書を保存する
 		</button>
 		<button onclick="onPosSave()" id="btn-pos-save" class="btn btn-outline-dark btn-col">
-			読んでいる位置を保存する
+			読んでいる位置を保存する</button>
+		<br />
+		<button onclick="onBack()" class="btn btn-outline-dark btn-col">
+			3秒戻す
+		</button>
+		<button onclick="onReset()" class="btn btn-outline-dark btn-col">
+			文章の初めに戻る
+		</button>
+		<button onclick="onParse()" class="btn btn-outline-dark btn-col">
+			再生/一時停止
+		</button>
+		<button onclick="onSkip()" class="btn btn-outline-dark btn-col">
+			3秒進める
 		</button>
 	</div>
 
