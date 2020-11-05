@@ -13,6 +13,7 @@ let jumpMs = 3000;
 let isParse = false;
 let isInitial = false;
 let lastDate = new Date();
+let isSplitting = false;
 
 let bgColor = "#fefefe";
 let textColor = "#282828";
@@ -38,7 +39,11 @@ function render() {
 
 	if (isParse)
 		ctx.fillText("[再生/一時停止]で開始", scrW / 2, 100 + textSize / 2);
-	else ctx.fillText(texts[pointer], scrW / 2, 100 + textSize / 2);
+	else if (isSplitting)
+		ctx.fillText("読み込み中...", scrW / 2, 100 + textSize / 2);
+	else
+		ctx.fillText(texts[pointer], scrW / 2, 100 + textSize / 2);
+
 
 	ctx.font = "normal 30px 'Yu Gothic'";
 
@@ -135,6 +140,8 @@ let baseUrl;
 async function onSubmit(orgText) {
 	const apiUrl = baseUrl + "result";
 
+	isSplitting = true;
+
 	let text;
 
 	if (!orgText) {
@@ -170,6 +177,8 @@ async function onSubmit(orgText) {
 	pointer = 0;
 	if (isInitial) isInitial = false;
 	else isParse = true;
+
+	isSplitting = false;
 }
 
 function onParse() {
@@ -276,7 +285,10 @@ async function onSave() {
 	if (!(name = window.prompt("保存する文書の名前を入力してください"))) {
 		lastText = prevText;
 
-		return alert("名前が空です");
+		if (!name)
+			return alert("名前が空です");
+		else
+			return;
 	}
 
 	if (name && name.length) {
