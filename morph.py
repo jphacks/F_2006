@@ -28,6 +28,7 @@ def keitaiso(honbun):
 #リストを分解し、単語ごとにリスト型にして出力する
 #今現在は名詞区切り
 
+limitter = 7   # 字数制限
 
 di = [[['おはようございます', '独立詞'], [' ', '空白'], ['今日', '名詞'], ['は', '連用助詞'], ['10月', '名詞'], ['31日', '名詞'], ['です', '判定詞']]] 
 
@@ -42,9 +43,26 @@ def tangoseisei(d):
                     tango_ls.append(buf_str)
                     buf_str = ''
 
+            elif(tango_info[1] == '句点'):  # 句点の場合、含めたものを分割したうえで一度空白を挟む
+                buf_str = buf_str + tango_info[0]
+                tango_ls.append(buf_str)
+                for i in range(2):
+                    tango_ls.append('')
+                buf_str = ''
+            
+            elif(tango_info[1] == '読点'):  # 読点の場合、含めたものを分割する
+                buf_str = buf_str + tango_info[0]
+                tango_ls.append(buf_str)
+                buf_str = ''
+
             elif(skip):                     # 前の単語が冠動詞などで有無を言わさず接続する場合
+                added_l = len(buf_str + tango_info[0])
+                if (added_l > limitter):
+                    tango_ls.append(buf_str)
+                    buf_str = tango_info[0]
+                else:
+                    buf_str = buf_str + tango_info[0]
                 skip = False
-                buf_str = buf_str+tango_info[0]     
 
             elif(
                 tango_info[1] == '名詞' or
@@ -71,7 +89,12 @@ def tangoseisei(d):
                 skip = True
 
             else:                           # その他
-                buf_str = buf_str + tango_info[0]
+                added_l = len(buf_str + tango_info[0])
+                if (added_l > limitter):
+                    tango_ls.append(buf_str)
+                    buf_str = tango_info[0]
+                else:
+                    buf_str = buf_str + tango_info[0]
                 
     tango_ls.append(buf_str)
     return tango_ls
