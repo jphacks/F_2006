@@ -12,17 +12,36 @@ appid = "2209ee67bfcb549e49c8f8c08da3f5a837a4085782abe759bafa5de02d7a4dc0"
 request_url = "https://labs.goo.ne.jp/api/morph"
 
 def keitaiso(honbun):
-    req_json = {
+    bunsho = honbun.split('\n')
+    load_buf = ''
+    tango_ls = []
+
+    for danraku in bunsho:
+        if (len(load_buf) + len(danraku) < 10000):
+            load_buf = load_buf + danraku
+        else:
+            last_req_json = {
+                'app_id' : appid,
+                'sentence' : load_buf,
+                'info_filter' : "form|pos"
+            }
+
+            last_res = requests.post(request_url,json=last_req_json)
+            last_res_json = last_res.json()
+            tango_ls = tango_ls + tangoseisei(last_res_json['word_list'])
+            load_buf = danraku
+
+    last_req_json = {
         'app_id' : appid,
-        'sentence' : honbun,
+        'sentence' : load_buf,
         'info_filter' : "form|pos"
     }
 
-    res = requests.post(request_url,json=req_json)
-    res_json = res.json()
-    d = res_json['word_list']
+    last_res = requests.post(request_url, json=last_req_json)
+    last_res_json = last_res.json()
+    tango_ls = tango_ls + tangoseisei(last_res_json['word_list'])
 
-    return d
+    return tango_ls
 
 
 #リストを分解し、単語ごとにリスト型にして出力する
@@ -99,4 +118,4 @@ def tangoseisei(d):
 
 
 def morph(string):
-    return tangoseisei(keitaiso(string))
+    return keitaiso(string)

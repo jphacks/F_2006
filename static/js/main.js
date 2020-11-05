@@ -12,6 +12,7 @@ let jumpMs = 3000;
 
 let isParse = false;
 let isInitial = false;
+let isLoad = false;
 let lastDate = new Date();
 
 let bgColor = "#fefefe";
@@ -35,8 +36,9 @@ function render() {
 	ctx.font = "normal " + textSize + "px 'Yu Gothic'";
 	ctx.fillStyle = textColor;
 	ctx.textAlign = "center";
-
-	if (isParse)
+	if (isLoad)
+		ctx.fillText("テキスト読み込み中...", scrW / 2, 100 + textSize / 2);
+	else if (isParse)
 		ctx.fillText("[再生/一時停止]で開始", scrW / 2, 100 + textSize / 2);
 	else ctx.fillText(texts[pointer], scrW / 2, 100 + textSize / 2);
 
@@ -134,6 +136,9 @@ let baseUrl;
 
 async function onSubmit(orgText) {
 	const apiUrl = baseUrl + "result";
+	isLoad = true;
+	if (isInitial) isInitial = false;
+	else isParse = true;
 
 	let text;
 
@@ -168,8 +173,8 @@ async function onSubmit(orgText) {
 	initLyrics(ctx);
 	console.log(res.text);
 	pointer = 0;
-	if (isInitial) isInitial = false;
-	else isParse = true;
+	
+	isLoad = false;
 }
 
 function onParse() {
@@ -256,8 +261,8 @@ async function onSave() {
 
 		if (!text) return alert("テキストが入力されていません");
 
-		if (text.length > 4000)
-			return alert('文書が長すぎます');
+		// if (text.length > 4000)
+		// 	return alert('文書が長すぎます');
 
 		console.log(text);
 
