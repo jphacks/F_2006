@@ -8,23 +8,46 @@ let rows = [0];
 
 let lyricsLoaded = false;
 
-function initLyrics(ctx) {
-  alphas = [];
-  toAlphas = [];
-
-  for (let i = 0; i < texts.length; ++i) {
-    alphas.push(alphaBack);
-    toAlphas.push(alphaBack);
-  }
-
-  lyricsLoaded = true;
-}
-
 let baseRow = 0;
 
-function renderLyrics(cvs, ctx, scrW, scrH, texts, pointer, textColor, bgColor) {
-  if (!lyricsLoaded)
-    return;
+function initLyrics() {
+  lyricsLoaded = false;
+}
+
+function renderLyrics(cvs, ctx, scrW, scrH, txts, pointer, textColor, bgColor) {
+  let texts = [];
+  let idxMap = [];
+
+  for (let i = 0; i < txts.length - 1; ++i) {
+    const isJapanese = (word) => {
+      for (let i = 0; i < word.length; ++i)
+        if (word.charCodeAt(i) >= 256) return true;
+
+      return false;
+    };
+
+    idxMap.push(texts.length);
+    texts.push(txts[i]);
+
+    if (!isJapanese(txts[i]) || !isJapanese(txts[i + 1])) {
+      texts.push(' ');
+    }
+  }
+
+  idxMap.push(texts.length);
+  texts.push(txts[txts.length - 1]);
+
+  if (!lyricsLoaded) {
+    alphas = [];
+    toAlphas = [];
+
+    for (let i = 0; i < texts.length; ++i) {
+      alphas.push(alphaBack);
+      toAlphas.push(alphaBack);
+    }
+
+    lyricsLoaded = true;
+  }
 
   let col = 0;
   let row = 0;
@@ -76,11 +99,13 @@ function renderLyrics(cvs, ctx, scrW, scrH, texts, pointer, textColor, bgColor) 
       continue;
     }
 
-    if (Math.abs(rows.indexOf(row) - focusRows[pointer]) <= 2) {
+
+    if (Math.abs(rows.indexOf(row) - focusRows[idxMap[pointer]]) <= 2) {
       ctx.font = "normal 20px 'Yu Gothic'";
       ctx.fillStyle = hex2rgba(textColor, alphas[i]);
       ctx.textAlign = "left";
       ctx.fillText(text, ox + col, row - baseRow + 220);
+      //console.log(text, ox + col, row - baseRow + 220);
     }
 
     col += metrics.width;
@@ -90,21 +115,27 @@ function renderLyrics(cvs, ctx, scrW, scrH, texts, pointer, textColor, bgColor) 
   ctx.fillRect(ox, 250 + 15, width, 100);
   ctx.fillRect(ox, 0, width, 220 - 15 - 45);
 
-  baseRow = morph(baseRow, rows[focusRows[pointer]], 20);
+  baseRow = morph(baseRow, rows[focusRows[idxMap[pointer]]], 20);
 
   if (!pointer) {
     baseRow = morph(baseRow, rows[0], 2);
     //baseRow = rows[0];
   }
 
-  alphaTimeStep(alphas, toAlphas, texts, pointer);
+  if (isNaN(baseRow))
+    baseRow = 0;
+
+  console.log("pointer");
+  console.log(pointer, idxMap[pointer]);
+
+  alphaTimeStep(alphas, toAlphas, texts, idxMap[pointer]);
 }
 
-function alphaTimeStep(alphas, toAlphas, texts, pointer) {
+function alphaTimeStep(alphas, toAlphas, texts, index) {
   for (let i = 0; i < texts.length; ++i) {
     alphas[i] = morph(alphas[i], toAlphas[i], 5);
 
-    toAlphas[i] = i == pointer ? alphaFocus : alphaBack;
+    toAlphas[i] = i == index ? alphaFocus : alphaBack;
   }
 }
 

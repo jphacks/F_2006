@@ -40,7 +40,9 @@ function render() {
 		ctx.fillText("テキスト読み込み中...", scrW / 2, 100 + textSize / 2);
 	else if (isParse)
 		ctx.fillText("[再生/一時停止]で開始", scrW / 2, 100 + textSize / 2);
-	else ctx.fillText(texts[pointer], scrW / 2, 100 + textSize / 2);
+	else
+		ctx.fillText(texts[pointer], scrW / 2, 100 + textSize / 2);
+
 
 	ctx.font = "normal 30px 'Yu Gothic'";
 
@@ -101,7 +103,7 @@ window.addEventListener("load", () => {
 			document.getElementById(domId).style.display = "none";
 
 		texts = docObj.units.map((unit) => unit.content);
-		initLyrics(ctx);
+		initLyrics();
 		pointer = docObj.doc.current_pos;
 	} else {
 		const invisibleList = ["btn-pos-save"];
@@ -140,6 +142,8 @@ async function onSubmit(orgText) {
 	if (isInitial) isInitial = false;
 	else isParse = true;
 
+	isSplitting = true;
+
 	let text;
 
 	if (!orgText) {
@@ -170,10 +174,10 @@ async function onSubmit(orgText) {
 	const res = await response.json();
 
 	texts = res.text;
-	initLyrics(ctx);
+	initLyrics();
 	console.log(res.text);
 	pointer = 0;
-	
+
 	isLoad = false;
 }
 
@@ -281,7 +285,10 @@ async function onSave() {
 	if (!(name = window.prompt("保存する文書の名前を入力してください"))) {
 		lastText = prevText;
 
-		return alert("名前が空です");
+		if (!name)
+			return alert("名前が空です");
+		else
+			return;
 	}
 
 	if (name && name.length) {
