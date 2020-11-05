@@ -172,6 +172,7 @@ def update():
              filter(tDocuments.uuid==data['uuid']).\
              first()
     doc.current_pos = data['current_pos']
+    doc.updated_at = datetime.now()
 
     db.session.commit()
     
