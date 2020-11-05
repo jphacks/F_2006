@@ -256,8 +256,8 @@ async function onSave() {
 
 		if (!text) return alert("テキストが入力されていません");
 
-		if (text.length > 4000)
-			return alert('文書が長すぎます');
+		// if (text.length > 4000)
+		// 	return alert('文書が長すぎます');
 
 		console.log(text);
 
