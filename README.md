@@ -16,58 +16,63 @@
 　しかし、そんな共有されるデジタル文書の中には、まとまりの悪い文書であったり、画像なしの文章だけが延々と描かれている文書があります。<br>
 　いかに大事な書類であっても、読み手にとって気分の良いものではありませんし、概要把握だけで時間が要する、長時間の集中で重要な箇所を見落とすなどの危険性があります。<br>
 
-　このことを解決するために私たちは速読君（仮）を製作しました。<br><br>
+　このことを解決するために私たちはFlash Readingを製作しました。<br><br>
 
 ### 製品概要
-　この製品は、高速逐次視覚提示を用いて、テキストボックスにコピー&ペーストされたテキストを区切って表示します。<br>
-　任意のテキストをコピー&ペーストして再生ボタンを押すことで、文節ごとに区切られたテキストを次々に表示していきます。
+* この製品は、高速逐次視覚提示を用いて、テキストボックスにコピー&ペーストされたテキストを区切って表示します。
+* 任意のテキストをコピー&ペーストして再生ボタンを押すことで、文節ごとに区切られたテキストを次々に表示していきます。
+* ユーザーとしてログインすることで、一度読み取ったテキストデータを保存することができます。
 
 ### 特長
-#### 特長1「みんなの『素早く』『読みたい』にあわせて」
+#### 特長1: 「みんなの『素早く』『読みたい』にあわせて」
 * 任意のテキストをテキストボックスにコピー&ペーストしたら自動的に文節で区切るため、読みたい文書を高速に読むことができます！
 * Flash Reading制作メンバー厳選の六種類のテーマカラーから好きなテーマを選択可能！お好きなテーマカラーで読むことができます！
+* 読むことが疲れたらやめましょう。ログインすれば文書を保存して次回から続きをそのまま閲覧することができます！
 
-#### 特長2「コピペすらも面倒だよね？」
+#### 特長2: 「コピペすらも面倒だよね？」
 * 任意のPDFテキストや画像をドラッグアンドドロップすることで、ファイル内のテキストを抽出！そのまま内容を閲覧することができます！
 
-#### 特長3「『たまには落ち着いて読みたい』も叶えます！」
+#### 特長3: 「『たまには落ち着いて読みたい』も叶えます！」
 * 表示速度を変更することが可能！**自分の読みたい速度**で読むことができます！落ち着いて読むときも目線を動かす必要はもうありません！
 
 ### 解決出来ること
 　わたしたちは中央に流れてくる文字を見ているだけでいいので、この製品があればもう文章を読むために目線を移動させる必要はありません！また、膨大な文章を目の当たりにしたとしても、それを少しずつ読むことができるので文章だけが延々と続く威圧的な文書も気軽に読み始めることができます！
 
 ### 今後の展望
+* 
 ### 注力したこと（こだわり等）
-* 
-* 
+*
+*
 
 ## 開発技術
 ### 活用した技術
-#### サーバー環境
+#### PaaS
 * Heroku
 
-#### 使用言語/フレームワーク
-* Python
-* JavaScript
-* flask
+#### フロントエンド
 * HTML5
-
-#### API
-* gooラボAPI
+* Javascript
+* Bootstrap
 * PDF.js
+* Tesseract.js
+
+#### バッグエンド
+* Python
+* Flask
+* Postgres
+* gooラボAPI
+* marshmallow
+* SQLAlchemy
 
 #### 開発環境
-* GitHub
 * CircleCI
+* docker
+* Visual Studio Code
+  
+  <br/><br/>
+  
+  ![heroku-1](https://user-images.githubusercontent.com/61216147/98361141-56d19800-206e-11eb-8f25-d07c4b8e5a44.png)　![HTML5_sticker](https://user-images.githubusercontent.com/61216147/98361309-a31cd800-206e-11eb-9434-e019c24410fb.png)　![bootstrap-5](https://user-images.githubusercontent.com/61216147/98361380-c6e01e00-206e-11eb-8348-48618d8ecc22.png)　![logo (2)](https://user-images.githubusercontent.com/61216147/98361500-fc850700-206e-11eb-9097-e02718f889d1.png)　![tesseract](https://user-images.githubusercontent.com/61216147/98361582-25a59780-206f-11eb-9a1b-d736e882439a.png)　![python-logo-master-v3-TM-flattened](https://user-images.githubusercontent.com/61216147/98361666-4bcb3780-206f-11eb-8fb3-2674d02af3a9.png)　![flask](https://user-images.githubusercontent.com/61216147/98361764-7fa65d00-206f-11eb-89bd-811705a32333.png)　![view@2x](https://user-images.githubusercontent.com/61216147/98361867-a6649380-206f-11eb-9f1b-7210ba80b12a.png)　![horizontal-logo-monochromatic-white](https://user-images.githubusercontent.com/61216147/98361929-c005db00-206f-11eb-8eef-c70417548671.png)　![1000px-Visual_Studio_Code_1 35_icon svg](https://user-images.githubusercontent.com/61216147/98362067-f5aac400-206f-11eb-967a-2093bb122068.png)
 
-![python-logo-master-v3-TM-flattened](https://user-images.githubusercontent.com/61216147/97863161-e531db00-1d49-11eb-9d6c-b9d406dde5f3.png)
-
-![flask](https://user-images.githubusercontent.com/61216147/97863045-b87dc380-1d49-11eb-95f7-08e7e3c806ad.png)
-![heroku-1](https://user-images.githubusercontent.com/61216147/97863083-c7647600-1d49-11eb-935a-7ec4711d0e8a.png)
-![HTML5_sticker](https://user-images.githubusercontent.com/61216147/97863112-d3503800-1d49-11eb-8ca0-d3ddb98ff6d6.png)
-![logo (2)](https://user-images.githubusercontent.com/61216147/97863145-de0acd00-1d49-11eb-86e8-4ad431b8c637.png)
-![view@2x](https://user-images.githubusercontent.com/61216147/97863179-ebc05280-1d49-11eb-8557-e2da7a2d2565.png)
-![1280px-Octicons-logo-github svg](https://user-images.githubusercontent.com/61216147/97863766-dd266b00-1d4a-11eb-812b-450111857b0f.png)
 
 ### 独自技術
 #### ハッカソンで開発した独自機能・技術
