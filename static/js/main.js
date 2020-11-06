@@ -1,7 +1,7 @@
 let texts = [""];
 
 const initialSentence =
-  "Flash Readingは、語句を連続でフラッシュ表示する「高速逐次視覚提示」を用いてテキストを高速に読むことを可能にしたアプリです。\
+	"Flash Readingは、語句を連続でフラッシュ表示する「高速逐次視覚提示」を用いてテキストを高速に読むことを可能にしたアプリです。\
 PDFや写真をテキストエリアにドラッグ & ドロップすると文字を読み取ることができます。";
 
 let pointer = 0;
@@ -11,184 +11,377 @@ let spanMs = 250;
 let jumpMs = 3000;
 
 let isParse = false;
-
+let isInitial = false;
+let isLoad = false;
 let lastDate = new Date();
 
 let bgColor = "#fefefe";
 let textColor = "#282828";
 let textSize = 30;
+let lastText = null;
+
+let ctx;
+let scrW;
 
 function render() {
-  const cvs = document.getElementById("canvas");
-  const ctx = cvs.getContext("2d");
-  const scrW = cvs.width;
-  const scrH = cvs.height;
+	const cvs = document.getElementById("canvas");
+	ctx = cvs.getContext("2d");
+	scrW = parseInt(cvs.style.width.slice(0, -2));
+	const scrH = parseInt(cvs.style.height.slice(0, -2));
 
-  ctx.clearRect(0, 0, scrW, scrH);
-  ctx.font = "normal " + textSize + "px 'Yu Gothic'";
-  ctx.fillStyle = textColor;
-  ctx.textAlign = "center";
+	ctx.clearRect(0, 0, scrW, scrH);
 
-  ctx.fillText(texts[pointer], scrW / 2, scrH / 2 + (textSize / 2));
+	renderLyrics(cvs, ctx, scrW, scrH, texts, pointer, textColor, bgColor);
 
-  let nowDate = new Date();
+	ctx.font = "normal " + textSize + "px 'Yu Gothic'";
+	ctx.fillStyle = textColor;
+	ctx.textAlign = "center";
+	if (isLoad)
+		ctx.fillText("テキスト読み込み中...", scrW / 2, 100 + textSize / 2);
+	else if (isParse)
+		ctx.fillText("[再生/一時停止]で開始", scrW / 2, 100 + textSize / 2);
+	else
+		ctx.fillText(texts[pointer], scrW / 2, 100 + textSize / 2);
 
-  if (nowDate - lastDate >= spanMs && isParse == false) {
-    pointer = (pointer + 1) % texts.length;
-    lastDate = nowDate;
-  }
 
-  requestAnimationFrame(render);
+	ctx.font = "normal 30px 'Yu Gothic'";
+
+	let nowDate = new Date();
+
+	if (nowDate - lastDate >= spanMs && isParse == false) {
+		pointer = (pointer + 1) % texts.length;
+		lastDate = nowDate;
+	}
+
+	requestAnimationFrame(render);
 }
 
 window.addEventListener("load", () => {
-  sizing();
+	sizing();
 
-  function sizing() {
-    let cvs = document.getElementById("canvas");
-    let cntr = document.getElementById("container");
+	//cvs.scale(3, 3);
 
-    cvs.height = cntr.offsetHeight;
-    cvs.width = cntr.offsetWidth;
-  }
+	function sizing() {
+		let cvs = document.getElementById("canvas");
+		let ctx = cvs.getContext("2d");
+		let cntr = document.getElementById("container");
 
-  window.addEventListener("resize", function () {
-    !window.requestAnimationFrame
-      ? setTimeout(sizing, 300)
-      : window.requestAnimationFrame(sizing);
-  });
+		const dpr = window.devicePixelRatio || 1;
 
-  render();
+		const width = cntr.offsetWidth;
+		const height = cntr.offsetHeight;
 
-  onSliderInput(spanMs);
-  onTextSliderInput(textSize);
-  onSubmit(initialSentence);
+		cvs.width = width * dpr;
+		cvs.height = height * dpr;
 
-  const spans = document.getElementsByClassName("color-box");
+		ctx.scale(dpr, dpr);
 
-  for (let i = 0; i < spans.length; ++i) {
-    const { hex } = spans[i].dataset;
+		cvs.style.width = width + "px";
+		cvs.style.height = height + "px";
+	}
 
-    spans[i].style.backgroundColor = `#${hex}`;
-    spans[i].classList.add("fadeIn");
-    spans[i].parentNode.parentNode.classList.add("flipIn");
-  }
+	window.addEventListener("resize", function () {
+		!window.requestAnimationFrame
+			? setTimeout(sizing, 300)
+			: window.requestAnimationFrame(sizing);
+	});
+
+	render();
+
+	onSliderInput(spanMs);
+	onTextSliderInput(textSize);
+
+	if (!canInsert) {
+		const invisibleList = [
+			"label-text",
+			"main-text",
+			"btn-read-start",
+			"btn-doc-save",
+		];
+
+		for (let domId of invisibleList)
+			document.getElementById(domId).style.display = "none";
+
+		texts = docObj.units.map((unit) => unit.content);
+		initLyrics();
+		pointer = docObj.doc.current_pos;
+	} else {
+		const invisibleList = ["btn-pos-save"];
+
+		for (let domId of invisibleList)
+			document.getElementById(domId).style.display = "none";
+
+		isInitial = true;
+		onSubmit(initialSentence);
+	}
+
+	const spans = document.getElementsByClassName("color-box");
+
+	for (let i = 0; i < spans.length; ++i) {
+		const { hex } = spans[i].dataset;
+
+		spans[i].style.backgroundColor = `#${hex}`;
+		spans[i].classList.add("fadeIn");
+		spans[i].parentNode.parentNode.classList.add("flipIn");
+	}
 });
 
 function onSliderInput(value) {
-  spanMs = value;
+	spanMs = value;
 
-  const message = "読み上げる間隔：" + spanMs + " ms";
+	const message = "読み上げる間隔：" + spanMs + " ms";
 
-  document.getElementById("read-speed").innerText = message;
+	document.getElementById("read-speed").innerText = message;
 }
 
 let baseUrl;
 
-function onSubmit(orgText) {
-  const apiUrl = baseUrl + "result";
+async function onSubmit(orgText) {
+	const apiUrl = baseUrl + "result";
+	isLoad = true;
+	if (isInitial) isInitial = false;
+	else isParse = true;
 
-  let text;
+	isSplitting = true;
 
-  if (!orgText) {
-    const textareaDom = document.getElementById("main-text");
-    text = textareaDom.value;
-  } else {
-    text = orgText;
-  }
+	let text;
 
-  const paramObj = {
-    text: text,
-  };
-  const method = "POST";
-  const headers = {
-    Accept: "application/json",
-    "Content-Type": "application/json",
-  };
-  const body = JSON.stringify(paramObj);
+	if (!orgText) {
+		const textareaDom = document.getElementById("main-text");
+		text = textareaDom.value;
+		lastText = text;
+	} else {
+		text = orgText;
+	}
 
-  console.log("onSubmit");
+	const paramObj = {
+		text: text,
+	};
+	const method = "POST";
+	const headers = {
+		Accept: "application/json",
+		"Content-Type": "application/json",
+	};
+	const body = JSON.stringify(paramObj);
 
-  fetch(apiUrl, { method: method, headers: headers, body: body }).then(
-    (res) => {
-      res.json().then((res) => {
-        texts = res.text;
-        console.log(res.text);
-        pointer = 0;
-      });
-    }
-  );
+	console.log("onSubmit");
+
+	const response = await fetch(apiUrl, {
+		method: method,
+		headers: headers,
+		body: body,
+	});
+	const res = await response.json();
+
+	texts = res.text;
+	initLyrics();
+	console.log(res.text);
+	pointer = 0;
+
+	isLoad = false;
 }
 
 function onParse() {
-  if (isParse == true) {
-    lastDate = new Date();
+	if (isParse == true) {
+		lastDate = new Date();
 
-    isParse = false;
-  } else {
-    isParse = true;
-  }
+		isParse = false;
+	} else {
+		isParse = true;
+	}
 }
 
 function onReset() {
-  lastDate = new Date();
-  pointer = 0;
+	lastDate = new Date();
+	pointer = 0;
 }
 
 function onBack() {
 	if (spanMs * pointer < 1000) {
 		if (texts.length * spanMs > jumpMs) {
-			pointer = texts.length - (jumpMs / spanMs);
+			pointer = texts.length - Math.floor(jumpMs / spanMs);
 		} else {
 			pointer = 0;
 		}
 	} else if (spanMs * pointer < jumpMs) {
 		pointer = 0;
 	} else {
-		pointer = pointer - (jumpMs / spanMs);
+		pointer = pointer - Math.floor(jumpMs / spanMs);
 	}
 }
 
 function onSkip() {
 	lastDate = new Date();
-	pointer = (pointer + (jumpMs / spanMs)) % texts.length;
+	pointer = (pointer + Math.floor(jumpMs / spanMs)) % texts.length;
 }
 
 function setColor(colorBg, colorTxt) {
-  bgColor = colorBg;
-  textColor = colorTxt;
+	bgColor = colorBg;
+	textColor = colorTxt;
 
-  document.getElementById("body").style.backgroundColor = bgColor;
+	document.getElementById("body").style.backgroundColor = bgColor;
 
-  var elements = document.getElementsByClassName("btn-col");
+	var elements = document.getElementsByClassName("btn-col");
 
-  if (bgColor == "#316745" || bgColor == "#1a110d") {
-    document.getElementById("body").style.color = "#ffffff";
-    document.getElementById("col-title").style.borderBottom =
-      "1px solid #eeeeee";
-    elements[0].classList.remove("btn-outline-dark");
-    elements[0].classList.add("btn-outline-light");
-    elements[1].classList.remove("btn-outline-dark");
-    elements[1].classList.add("btn-outline-light");
-    elements[2].classList.remove("btn-outline-dark");
-    elements[2].classList.add("btn-outline-light");
-  } else {
-    document.getElementById("body").style.color = "#000000";
-    document.getElementById("col-title").style.borderBottom =
-      "1px solid #7f7975";
-    elements[0].classList.remove("btn-outline-light");
-    elements[0].classList.add("btn-outline-dark");
-    elements[1].classList.remove("btn-outline-light");
-    elements[1].classList.add("btn-outline-dark");
-    elements[2].classList.remove("btn-outline-light");
-    elements[2].classList.add("btn-outline-dark");
-  }
+	if (bgColor == "#316745" || bgColor == "#1a110d") {
+		document.getElementById("body").style.color = "#ffffff";
+		document.getElementById("col-title").style.borderBottom =
+			"1px solid #eeeeee";
+
+		for (let element of elements) {
+			element.classList.remove("btn-outline-dark");
+			element.classList.add("btn-outline-light");
+		}
+	} else {
+		document.getElementById("body").style.color = "#000000";
+		document.getElementById("col-title").style.borderBottom =
+			"1px solid #7f7975";
+
+		for (let element of elements) {
+			element.classList.remove("btn-outline-light");
+			element.classList.add("btn-outline-dark");
+		}
+	}
 }
 
 function onTextSliderInput(size) {
-  textSize = size;
+	textSize = size;
 
-  const message = "テキストサイズ：" + size + " px";
+	const message = "テキストサイズ：" + size + " px";
 
-  document.getElementById("text-size").innerText = message;
+	document.getElementById("text-size").innerText = message;
+}
+
+// param required: content, name, current_pos, split_units
+async function onSave() {
+	const apiUrl = baseUrl + "insert";
+
+	let prevText = lastText;
+
+	// Validation
+	if (!lastText) {
+		const textareaDom = document.getElementById("main-text");
+		const text = textareaDom.value;
+
+		if (!text) return alert("テキストが入力されていません");
+
+		// if (text.length > 4000)
+		// 	return alert('文書が長すぎます');
+
+		console.log(text);
+
+		lastText = text;
+
+		await onSubmit(text);
+
+		console.log("ended");
+	}
+	if (texts.length == 1 && texts[0] === "")
+		return alert("エラーが発生しました");
+	if (pointer < 0 || pointer >= texts.length)
+		return alert("エラーが発生しました");
+	if (texts.length > 1000) return alert("文書が長すぎます");
+
+	if (!(name = window.prompt("保存する文書の名前を入力してください"))) {
+		lastText = prevText;
+
+		if (!name)
+			return alert("名前が空です");
+		else
+			return;
+	}
+
+	if (name && name.length) {
+		const paramObj = {
+			content: lastText,
+			split_units: texts,
+			current_pos: pointer,
+			name: name,
+		};
+		const method = "POST";
+		const headers = {
+			Accept: "application/json",
+			"Content-Type": "application/json",
+		};
+		const body = JSON.stringify(paramObj);
+
+		console.log(name);
+
+		console.log("onSave");
+
+		await fetch(apiUrl, { method: method, headers: headers, body: body }).then(
+			(_) => {
+				window.location.href = baseUrl + "list";
+			}
+		);
+	} else {
+		lastText = prevText;
+
+		return alert("名前が空です");
+	}
+}
+
+// param required: uuid
+function onDelete(uuid) {
+	const apiUrl = baseUrl + "delete";
+
+	// Validation
+	if (!uuid) return alert("エラーが発生しました");
+
+	const paramObj = {
+		uuid: uuid,
+	};
+	const method = "POST";
+	const headers = {
+		Accept: "application/json",
+		"Content-Type": "application/json",
+	};
+	const body = JSON.stringify(paramObj);
+
+	console.log("onDelete");
+
+	fetch(apiUrl, { method: method, headers: headers, body: body }).then((_) => {
+		location.reload();
+	});
+}
+
+// param required: uuid, current_pos
+function onPosSave() {
+	const apiUrl = baseUrl + "update";
+
+	// Validation
+	if (!docObj.doc.uuid) return alert("エラーが発生しました");
+	if (pointer < 0 || pointer >= texts.length)
+		return alert("エラーが発生しました");
+
+	const paramObj = {
+		uuid: docObj.doc.uuid,
+		current_pos: pointer,
+	};
+	const method = "POST";
+	const headers = {
+		Accept: "application/json",
+		"Content-Type": "application/json",
+	};
+	const body = JSON.stringify(paramObj);
+
+	console.log("onPosSave");
+
+	fetch(apiUrl, { method: method, headers: headers, body: body }).then((_) => {
+		window.location.href = baseUrl + "list";
+	});
+}
+
+function summarize(str) {
+	return str.substr(0, 140) + "...";
+}
+
+function formatDate(dateStr) {
+	const index = dateStr.lastIndexOf("+");
+
+	let ret = dateStr.substr(0, index);
+
+	ret = ret.replace("T", " ");
+
+	return ret;
 }

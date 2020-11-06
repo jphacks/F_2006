@@ -1,18 +1,11 @@
 {% extends "layout.html" %} {% block content %}
 <!--ナビゲーションバー-->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-	<button
-		class="navbar-toggler navbar-toggler-right"
-		type="button"
-		data-toggle="collapse"
-		data-target="#navbarTogglerDemo02"
-		aria-controls="navbarTogglerDemo02"
-		aria-expanded="false"
-		aria-label="Toggle navigation"
-	>
+	<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02"
+	 aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
 	</button>
-	<a class="navbar-brand" href="">Flash Reading</a>
+	<a class="navbar-brand text-monospace" style="pointer-events: none;">Flash Reading</a>
 
 	<div class="collapse navbar-collapse" id="navbarTogglerDemo02">
 		<ul class="navbar-nav mr-auto mt-2 mt-md-0">
@@ -22,46 +15,67 @@
 			<li class="nav-item">
 				<a class="nav-link" href="{{url_for('read')}}">Try！</a>
 			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="{{url_for('list')}}">保存した文書</a>
+			</li>
+			{% if current_user.is_authenticated %}
+			<li class="nav-item">
+				<a class="nav-link" href="{{url_for('logout')}}">ログアウト</a>
+			</li>
+			{% else %}
+			<li class="nav-item">
+				<a class="nav-link" href="{{url_for('login')}}">ログイン</a>
+			</li>
+			{% endif %}
+			<li class="nav-item">
+				<a class="nav-link" href="{{url_for('register')}}">ユーザー登録</a>
+			</li>
+		</ul>
+		<ul class="navbar-nav mt-2 mt-md-0">
+			{% if current_user.is_authenticated %}
+			<li class="nav-item active">
+				<a class="nav-link">{{current_user.user_name}}</a>
+			</li>
+			{% endif %}
 		</ul>
 	</div>
 </nav>
 <div class="container" style="letter-spacing: 0.08em" 　>
 	<div class="row">
-		<div class="col-2"></div>
-		<div class="col-8">
-			<div style="margin: 80px"></div>
-			<h5 style="line-height: 1.4em">
-				Flash Reading
-				は、語句を連続でフラッシュ表示する「高速逐次視覚提示」を用いてテキストを素早く読むことを可能にしたアプリです。
-			</h5>
-			<div style="margin: 40px"></div>
-			<h5 style="line-height: 1.4em">
-				人間は眼を動かしている間は文字情報を受け取っておらず、文字の上に停留しているときに情報を受け取ります。
-				このアプリを利用することで視線を動かす時間を減らし、読み取ることだけに集中することができます。
-			</h5>
-			<div style="margin: 40px"></div>
-			<h5 style="line-height: 1.4em">
-				フォームにテキストを入力することで自分の読みたい文章をフラッシュ表示できます。
-				また、PDFや写真をテキストエリアにドラッグ&ドロップすると文字を読み取ることができます。（写真の読み込みには時間がかかります。）
-			</h5>
-			<div style="margin: 40px"></div>
-			<div style="margin: 40px"></div>
-			<h5 style="line-height: 1.4em">
-				ーこんな人におすすめー
-				<div style="margin: 10px"></div>
-				<ul>
-					<li>文章を読み飛ばしがちな人</li>
-					<li>速読の練習をしたい人</li>
-					<li>小さい文字を読むのがつらい人</li>
-				</ul>
-			</h5>
-			<div style="margin: 40px"></div>
-			<h5 style="line-height: 1.4em">
-				当てはまった方は是非使ってみてください！
-			</h5>
-			<div style="margin: 80px"></div>
+		<div class="col-1"></div>
+		<div class="col-10">
+			<div style="margin: 20px"></div>
+			<image src="static/image/logo-cut.png" class="img-fluid" alt="Responsive image">
+				<div style="margin: 30px"></div>
+				<h5 style="line-height: 1.4em">
+					Flash Reading は、語句を連続でフラッシュ表示する「高速逐次視覚提示」を用いてテキストを素早く読むことを可能にしたアプリです。
+				</h5>
+				<div style="margin: 40px"></div>
+				<h5 style="line-height: 1.4em">
+					人間は眼を動かしている間は文字情報を受け取っておらず、文字の上に停留しているときに情報を受け取ります。 このアプリを利用することで視線を動かす時間を減らし、読み取ることだけに集中することができます。
+				</h5>
+				<div style="margin: 40px"></div>
+				<h5 style="line-height: 1.4em">
+					フォームにテキストを入力することで自分の読みたい文章をフラッシュ表示できます。 また、PDFや写真をテキストエリアにドラッグ&ドロップすると文字を読み取ることができます。（写真の読み込みには時間がかかります。）
+				</h5>
+				<div style="margin: 40px"></div>
+				<div style="margin: 40px"></div>
+				<h5 style="line-height: 1.4em">
+					ーこんな人におすすめー
+					<div style="margin: 10px"></div>
+					<ul>
+						<li>文章を読み飛ばしがちな人</li>
+						<li>速読の練習をしたい人</li>
+						<li>小さい文字を読むのがつらい人</li>
+					</ul>
+				</h5>
+				<div style="margin: 40px"></div>
+				<h5 style="line-height: 1.4em">
+					当てはまった方は是非使ってみてください！
+				</h5>
+				<div style="margin: 80px"></div>
 		</div>
-		<div class="col-2"></div>
+		<div class="col-1"></div>
 	</div>
 	<div style="text-align: center">
 		<a href="{{url_for('read')}}" class="btn btn-dark text-center">
