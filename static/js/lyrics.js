@@ -99,7 +99,6 @@ function renderLyrics(cvs, ctx, scrW, scrH, txts, pointer, textColor, bgColor) {
       continue;
     }
 
-
     if (Math.abs(rows.indexOf(row) - focusRows[idxMap[pointer]]) <= 2) {
       ctx.font = "normal 20px 'Yu Gothic'";
       ctx.fillStyle = hex2rgba(textColor, alphas[i]);
@@ -124,9 +123,6 @@ function renderLyrics(cvs, ctx, scrW, scrH, txts, pointer, textColor, bgColor) {
 
   if (isNaN(baseRow))
     baseRow = 0;
-
-  console.log("pointer");
-  console.log(pointer, idxMap[pointer]);
 
   alphaTimeStep(alphas, toAlphas, texts, idxMap[pointer]);
 }
