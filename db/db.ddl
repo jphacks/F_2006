@@ -25,7 +25,7 @@ drop table if exists t_users cascade;
 
 create table t_users (
   id character(36) not null
-  , user_name character(36) not null
-  , password character(36) not null
+  , user_name text not null
+  , password text not null
   , constraint t_users_PKC primary key (id)  
 );
