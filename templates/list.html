@@ -34,7 +34,7 @@
 		</ul>
 		<ul class="navbar-nav mt-2 mt-md-0">
 			{% if current_user.is_authenticated %}
-			<li class="nav-item">
+			<li class="nav-item active">
 				<a class="nav-link">{{current_user.user_name}}</a>
 			</li>
 			{% endif %}
