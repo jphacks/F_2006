@@ -223,6 +223,7 @@ def doc(uuid):
     return render_template('index.html', baseUrl=request.base_url, canInsert=False, docObj=docObj)
 
 @app.route('/read')
+@login_required
 def read():
     return render_template('index.html', baseUrl=request.base_url, canInsert=True, docObj="{}")
 
@@ -248,6 +249,7 @@ def result():
 
 # required param: content, name, current_pos, split_units, user_uuid
 @app.route('/insert', methods=["POST"])
+@login_required
 def insert():
     if request.headers['Content-Type'] != 'application/json':
         print(request.headers['Content-Type'])
@@ -275,6 +277,7 @@ def insert():
 
 # required param: uuid, current_pos
 @app.route('/update', methods=["POST"])
+@login_required
 def update():
     if request.headers['Content-Type'] != 'application/json':
         print(request.headers['Content-Type'])
@@ -296,6 +299,7 @@ def update():
 
 # required param: uuid のみ
 @app.route('/delete', methods=["POST"])
+@login_required
 def delete():
     if request.headers['Content-Type'] != 'application/json':
         print(request.headers['Content-Type'])
