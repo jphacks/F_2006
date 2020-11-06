@@ -2,20 +2,11 @@
 
 <!--ナビゲーションバー-->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-	<button
-		class="navbar-toggler navbar-toggler-right"
-		type="button"
-		data-toggle="collapse"
-		data-target="#navbarTogglerDemo02"
-		aria-controls="navbarTogglerDemo02"
-		aria-expanded="false"
-		aria-label="Toggle navigation"
-	>
+	<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02"
+	 aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
 	</button>
-	<a class="navbar-brand text-monospace" style="pointer-events: none"
-		>Flash Reading</a
-	>
+	<a class="navbar-brand text-monospace" style="pointer-events: none">Flash Reading</a>
 
 	<div class="collapse navbar-collapse" id="navbarTogglerDemo02">
 		<ul class="navbar-nav mr-auto mt-2 mt-md-0">
@@ -28,6 +19,25 @@
 			<li class="nav-item active">
 				<a class="nav-link" href="{{url_for('list')}}">保存した文書</a>
 			</li>
+			{% if current_user.is_authenticated %}
+			<li class="nav-item">
+				<a class="nav-link" href="{{url_for('logout')}}">ログアウト</a>
+			</li>
+			{% else %}
+			<li class="nav-item">
+				<a class="nav-link" href="{{url_for('login')}}">ログイン</a>
+			</li>
+			{% endif %}
+			<li class="nav-item">
+				<a class="nav-link" href="{{url_for('register')}}">ユーザー登録</a>
+			</li>
+		</ul>
+		<ul class="navbar-nav mt-2 mt-md-0">
+			{% if current_user.is_authenticated %}
+			<li class="nav-item">
+				<a class="nav-link">{{current_user.user_name}}</a>
+			</li>
+			{% endif %}
 		</ul>
 	</div>
 </nav>
@@ -47,23 +57,14 @@
 			<h2 style="margin-top: 10px; clear: both" id="list-title">
 				{{doc.name}}
 			</h2>
-			<h5
-				id="content-{{doc.uuid}}"
-				style="margin: 1em 0.4em 0.2em 0.3em; line-height: 1.4em"
-			></h5>
+			<h5 id="content-{{doc.uuid}}" style="margin: 1em 0.4em 0.2em 0.3em; line-height: 1.4em"></h5>
 			<!-- <h4>しおりの位置: {{doc.current_pos}}</h4> -->
 
 			<br />
-			<button
-				onclick="location.href='{{url_for('doc', uuid=doc.uuid)}}'"
-				class="btn btn-dark text-center"
-			>
+			<button onclick="location.href='{{url_for('doc', uuid=doc.uuid)}}'" class="btn btn-dark text-center">
 				文書を読む
 			</button>
-			<button
-				onclick="onDelete('{{doc.uuid}}')"
-				class="btn btn-dark text-center"
-			>
+			<button onclick="onDelete('{{doc.uuid}}')" class="btn btn-dark text-center">
 				文書を削除
 			</button>
 		</li>
@@ -85,8 +86,7 @@
 
 				docIndex += 1;
 			}
-		</script>
-		{% endfor %}
+		</script> {% endfor %}
 	</ul>
 </div>
 {% endblock %}
