@@ -39,10 +39,14 @@
 　わたしたちは中央に流れてくる文字を見ているだけでいいので、この製品があればもう文章を読むために目線を移動させる必要はありません！また、膨大な文章を目の当たりにしたとしても、それを少しずつ読むことができるので文章だけが延々と続く威圧的な文書も気軽に読み始めることができます！
 
 ### 今後の展望
-* 
+* 今回、形態素解析を用いて解析したのは日本語だけで、英語は単純な単語での分割だけを行った。もし改善するのであれば、英語も形態素解析をかけてより正確な分割を行いたい。
+
+
 ### 注力したこと（こだわり等）
-*
-*
+* 全文表示の所について、透明度の計算や行が移る動きを結構工夫した。
+* OCRで読み取った文章を使いやすいように整形した。
+* DBやログイン機能から、Docker, CircleCIまで、普段の業務で見聞きしてきた技術を積極的に導入した。
+* 実際に表示される文字が長くなると一瞬で消えてくためにかえって読みにくくなると思い、形態素解析によって単語分割されてモノを、単に文節分割にするだけでなく、文字数によっても分割するような仕組みにした。
 
 ## 開発技術
 ### 活用した技術
@@ -69,9 +73,9 @@
 * docker
 * Visual Studio Code
   
-  <br/><br/>
+<br/><br/>
   
-  ![heroku-1](https://user-images.githubusercontent.com/61216147/98361141-56d19800-206e-11eb-8f25-d07c4b8e5a44.png)　![HTML5_sticker](https://user-images.githubusercontent.com/61216147/98361309-a31cd800-206e-11eb-9434-e019c24410fb.png)　![bootstrap-5](https://user-images.githubusercontent.com/61216147/98361380-c6e01e00-206e-11eb-8348-48618d8ecc22.png)　![logo (2)](https://user-images.githubusercontent.com/61216147/98361500-fc850700-206e-11eb-9097-e02718f889d1.png)　![tesseract](https://user-images.githubusercontent.com/61216147/98361582-25a59780-206f-11eb-9a1b-d736e882439a.png)　![python-logo-master-v3-TM-flattened](https://user-images.githubusercontent.com/61216147/98361666-4bcb3780-206f-11eb-8fb3-2674d02af3a9.png)　![flask](https://user-images.githubusercontent.com/61216147/98361764-7fa65d00-206f-11eb-89bd-811705a32333.png)　![view@2x](https://user-images.githubusercontent.com/61216147/98361867-a6649380-206f-11eb-9f1b-7210ba80b12a.png)　![horizontal-logo-monochromatic-white](https://user-images.githubusercontent.com/61216147/98361929-c005db00-206f-11eb-8eef-c70417548671.png)　![1000px-Visual_Studio_Code_1 35_icon svg](https://user-images.githubusercontent.com/61216147/98362067-f5aac400-206f-11eb-967a-2093bb122068.png)
+![heroku-1](https://user-images.githubusercontent.com/61216147/98361141-56d19800-206e-11eb-8f25-d07c4b8e5a44.png)　![HTML5_sticker](https://user-images.githubusercontent.com/61216147/98361309-a31cd800-206e-11eb-9434-e019c24410fb.png)　![bootstrap-5](https://user-images.githubusercontent.com/61216147/98361380-c6e01e00-206e-11eb-8348-48618d8ecc22.png)　![logo (2)](https://user-images.githubusercontent.com/61216147/98361500-fc850700-206e-11eb-9097-e02718f889d1.png)　![tesseract](https://user-images.githubusercontent.com/61216147/98361582-25a59780-206f-11eb-9a1b-d736e882439a.png)　![python-logo-master-v3-TM-flattened](https://user-images.githubusercontent.com/61216147/98361666-4bcb3780-206f-11eb-8fb3-2674d02af3a9.png)　![flask](https://user-images.githubusercontent.com/61216147/98361764-7fa65d00-206f-11eb-89bd-811705a32333.png)　![view@2x](https://user-images.githubusercontent.com/61216147/98361867-a6649380-206f-11eb-9f1b-7210ba80b12a.png)　![horizontal-logo-monochromatic-white](https://user-images.githubusercontent.com/61216147/98361929-c005db00-206f-11eb-8eef-c70417548671.png)　![1000px-Visual_Studio_Code_1 35_icon svg](https://user-images.githubusercontent.com/61216147/98362067-f5aac400-206f-11eb-967a-2093bb122068.png)
 
 
 ### 独自技術
