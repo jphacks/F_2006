@@ -88,8 +88,23 @@ window.addEventListener("load", () => {
 
 	render();
 
+	const sessionBgColor = localStorage.getItem('flash-reading-bgColor');
+	const sessionTextColor = localStorage.getItem('flash-reading-textColor');
+	const sessionTextSize = localStorage.getItem('flash-reading-textSize');
+	const sessionSpanMs = localStorage.getItem('flash-reading-spanMs');
+
+	if (sessionBgColor)
+		bgColor = sessionBgColor;
+	if (sessionTextColor)
+		textColor = sessionTextColor;
+	if (sessionTextSize)
+		textSize = sessionTextSize;
+	if (sessionSpanMs)
+		spanMs = sessionSpanMs;
+
 	onSliderInput(spanMs);
 	onTextSliderInput(textSize);
+	setColor(bgColor, textColor);
 
 	if (!canInsert) {
 		const invisibleList = [
@@ -131,6 +146,9 @@ function onSliderInput(value) {
 
 	const message = "読み上げる間隔：" + spanMs + " ms";
 
+	localStorage.setItem('flash-reading-spanMs', spanMs);
+
+	document.getElementById("speed-slider").value = spanMs;
 	document.getElementById("read-speed").innerText = message;
 }
 
@@ -219,6 +237,9 @@ function setColor(colorBg, colorTxt) {
 	bgColor = colorBg;
 	textColor = colorTxt;
 
+	localStorage.setItem('flash-reading-bgColor', colorBg);
+	localStorage.setItem('flash-reading-textColor', colorTxt);
+
 	document.getElementById("body").style.backgroundColor = bgColor;
 
 	var elements = document.getElementsByClassName("btn-col");
@@ -249,6 +270,9 @@ function onTextSliderInput(size) {
 
 	const message = "テキストサイズ：" + size + " px";
 
+	localStorage.setItem('flash-reading-textSize', textSize);
+
+	document.getElementById("text-slider").value = textSize;
 	document.getElementById("text-size").innerText = message;
 }
 
