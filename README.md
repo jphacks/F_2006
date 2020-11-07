@@ -3,7 +3,8 @@
 [![unknown](https://user-images.githubusercontent.com/61216147/97867819-e6ff9c80-1d51-11eb-8c5d-4e82e9e47f44.png)](https://flash-reading.herokuapp.com/)
 
 ## 製品概要
-　
+[![IMAGE ALT](http://img.youtube.com/vi/XPKoUpRGA2c/0.jpg)](http://www.youtube.com/watch?v=XPKoUpRGA2c "紹介動画")
+
 ### 制作動機
 #### 「オンライン授業、今日は解説がGoogle Documentで配布されてる。」<br>
 
