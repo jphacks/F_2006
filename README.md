@@ -76,9 +76,3 @@
 <br/><br/>
   
 ![heroku-1](https://user-images.githubusercontent.com/61216147/98361141-56d19800-206e-11eb-8f25-d07c4b8e5a44.png)　![HTML5_sticker](https://user-images.githubusercontent.com/61216147/98361309-a31cd800-206e-11eb-9434-e019c24410fb.png)　![bootstrap-5](https://user-images.githubusercontent.com/61216147/98361380-c6e01e00-206e-11eb-8348-48618d8ecc22.png)　![logo (2)](https://user-images.githubusercontent.com/61216147/98361500-fc850700-206e-11eb-9097-e02718f889d1.png)　![tesseract](https://user-images.githubusercontent.com/61216147/98361582-25a59780-206f-11eb-9a1b-d736e882439a.png)　![python-logo-master-v3-TM-flattened](https://user-images.githubusercontent.com/61216147/98361666-4bcb3780-206f-11eb-8fb3-2674d02af3a9.png)　![flask](https://user-images.githubusercontent.com/61216147/98361764-7fa65d00-206f-11eb-89bd-811705a32333.png)　![view@2x](https://user-images.githubusercontent.com/61216147/98361867-a6649380-206f-11eb-9f1b-7210ba80b12a.png)　![horizontal-logo-monochromatic-white](https://user-images.githubusercontent.com/61216147/98361929-c005db00-206f-11eb-8eef-c70417548671.png)　![1000px-Visual_Studio_Code_1 35_icon svg](https://user-images.githubusercontent.com/61216147/98362067-f5aac400-206f-11eb-967a-2093bb122068.png)
-
-
-### 独自技術
-#### ハッカソンで開発した独自機能・技術
-* 独自で開発したものの内容をこちらに記載してください
-* 特に力を入れた部分をファイルリンク、またはcommit_idを記載してください。
