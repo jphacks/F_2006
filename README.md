@@ -1,5 +1,5 @@
 # Flash Reading
-
+## 製品ページ（画像クリックでジャンプします）
 [![unknown](https://user-images.githubusercontent.com/61216147/97867819-e6ff9c80-1d51-11eb-8c5d-4e82e9e47f44.png)](https://flash-reading.herokuapp.com/)
 
 ## 製品概要
