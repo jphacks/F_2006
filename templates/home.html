@@ -18,6 +18,25 @@
 			<li class="nav-item">
 				<a class="nav-link" href="{{url_for('list')}}">保存した文書</a>
 			</li>
+			{% if current_user.is_authenticated %}
+			<li class="nav-item">
+				<a class="nav-link" href="{{url_for('logout')}}">ログアウト</a>
+			</li>
+			{% else %}
+			<li class="nav-item">
+				<a class="nav-link" href="{{url_for('login')}}">ログイン</a>
+			</li>
+			{% endif %}
+			<li class="nav-item">
+				<a class="nav-link" href="{{url_for('register')}}">ユーザー登録</a>
+			</li>
+		</ul>
+		<ul class="navbar-nav mt-2 mt-md-0">
+			{% if current_user.is_authenticated %}
+			<li class="nav-item active">
+				<a class="nav-link">{{current_user.user_name}}</a>
+			</li>
+			{% endif %}
 		</ul>
 	</div>
 </nav>
