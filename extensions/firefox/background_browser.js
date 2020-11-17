@@ -1,15 +1,15 @@
 browser.contextMenus.create({
-  id : "self",
-  title : "選択したテキストを読む...",
-  contexts : [
+  id: "self",
+  title: "選択したテキストを読む...",
+  contexts: [
     "selection"
-  ],
-  onclick : function(info){
+  ]
+});
 
-    // 文字を抽出 / その他項目の初期化
-    var str = info.selectionText;
-    var url = "https://flash-reading.herokuapp.com?sentence=true";
+browser.contextMenus.onClicked.addListener(function (info, tab) {
+  const sentence = info.selectionText;
 
-    // TODO: 出力
-  }
+  const url = 'http://localhost:5000/read?q=' + encodeURI(sentence);//'https://flash-reading.herokuapp.com/read';
+
+  browser.tabs.create({ url });
 });

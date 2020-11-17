@@ -220,12 +220,16 @@ def doc(uuid):
 
     docObj['units'] = unitsJson
 
-    return render_template('index.html', baseUrl=request.base_url, canInsert=False, docObj=docObj)
+    return render_template('index.html', baseUrl=request.base_url, canInsert=False, docObj=docObj, sentence="")
 
 @app.route('/read')
-@login_required
 def read():
-    return render_template('index.html', baseUrl=request.base_url, canInsert=True, docObj="{}")
+    sentence = request.args.get('q')
+
+    if not sentence:
+        sentence = ""
+
+    return render_template('index.html', baseUrl=request.base_url, canInsert=True, docObj="{}", sentence=sentence)
 
 @app.route('/result', methods=["POST"])
 def result():

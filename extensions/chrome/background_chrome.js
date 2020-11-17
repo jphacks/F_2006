@@ -1,16 +1,14 @@
 chrome.contextMenus.create({
-  title : "選択したテキストを読む...",
-  contexts : [
+  title: "選択したテキストを読む...",
+  contexts: [
     "selection"
   ],
-  type : "normal", 
-  onclick : function(info){
+  type: "normal",
+  onclick: function (info) {
+    const sentence = info.selectionText;
 
-    // 文字を抽出 / その他項目の初期化
-    var str = info.selectionText;
-    var url = "https://flash-reading.herokuapp.com?sentence=true";
-    console.log("str = `" + str + "`");
+    const url = 'http://localhost:5000/read?q=' + encodeURI(sentence);//'https://flash-reading.herokuapp.com/read';
 
-    // TODO: 出力
+    window.open(url, 'newtab');
   }
 })

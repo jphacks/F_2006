@@ -1,6 +1,6 @@
 let texts = [""];
 
-const initialSentence =
+let initialSentence =
 	"Flash Readingは、語句を連続でフラッシュ表示する「高速逐次視覚提示」を用いてテキストを高速に読むことを可能にしたアプリです。\
 PDFや写真をテキストエリアにドラッグ & ドロップすると文字を読み取ることができます。";
 
@@ -126,7 +126,23 @@ window.addEventListener("load", () => {
 		for (let domId of invisibleList)
 			document.getElementById(domId).style.display = "none";
 
-		isInitial = true;
+		if (!currentUser) {
+			const invisibleList = [
+				"btn-doc-save",
+			];
+
+			for (let domId of invisibleList)
+				document.getElementById(domId).style.display = "none";
+		}
+
+		if (sentence.length > 0) {
+			initialSentence = sentence;
+			document.getElementById("main-text").value = sentence;
+			isInitial = false;
+		} else {
+			isInitial = true;
+		}
+
 		onSubmit(initialSentence);
 	}
 
