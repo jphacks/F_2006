@@ -7,7 +7,7 @@ chrome.contextMenus.create({
   onclick: function (info) {
     const sentence = info.selectionText;
 
-    const url = 'http://localhost:5000/read?q=' + encodeURI(sentence);//'https://flash-reading.herokuapp.com/read';
+    const url = 'http://flash-reading-dev.herokuapp.com/read?q=' + encodeURI(sentence);//'https://flash-reading.herokuapp.com/read';
 
     window.open(url, 'newtab');
   }
