@@ -9,7 +9,7 @@ browser.contextMenus.create({
 browser.contextMenus.onClicked.addListener(function (info, tab) {
   const sentence = info.selectionText;
 
-  const url = 'http://localhost:5000/read?q=' + encodeURI(sentence);//'https://flash-reading.herokuapp.com/read';
+  const url = 'http://flash-reading-dev.herokuapp.com/read?q=' + encodeURI(sentence);//'https://flash-reading.herokuapp.com/read';
 
   browser.tabs.create({ url });
 });
