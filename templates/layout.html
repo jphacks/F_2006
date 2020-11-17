@@ -26,7 +26,9 @@
 		const canInsert = "{{canInsert}}" === "True";
 		const docObj = {{ docObj| tojson | safe}};
 
+		{% autoescape false %}
 		const sentence = `{{sentence}}`;
+		{% endautoescape %}
 
 		let currentUser = null;
 

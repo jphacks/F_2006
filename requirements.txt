@@ -19,7 +19,7 @@ marshmallow-sqlalchemy==0.24.0
 Naked==0.1.31
 psycopg2===2.8.6
 pycryptodome==3.9.9
-pycryptodomex==3.9.9
+pycryptodomex==3.9.9ji
 PyYAML==5.3.1
 requests==2.24.0
 shellescape==3.8.1
