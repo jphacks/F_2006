@@ -7,7 +7,8 @@
     "tabs",
     "http://*/*",
     "https://*/*",
-    "contextMenus"
+    "contextMenus",
+    "notifications"
   ],
   "background": {
     "scripts": [

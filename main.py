@@ -136,7 +136,7 @@ def login():
 
             return redirect(url_for('home'))
         else:
-            return jsonify(res='login error'), 400 
+            return render_template('error.html', baseUrl=request.base_url, canInsert=False, docObj="{}", sentence="ログインエラーが発生しました")
     else:
         return render_template('login.html', buttonName="Login", formName='ログイン', action="login", docObj="{}")           
 
@@ -153,6 +153,9 @@ def register():
         user_name = request.form['user-name']
         password = request.form['password']
 
+        if len(password) > 32:
+            return render_template('error.html', baseUrl=request.base_url, canInsert=False, docObj="{}", sentence="パスワードが長すぎます (32 文字以内にしてください)")
+
         password = str(encryptPassword(password, user_name))
 
         userDoc = db.session.\
@@ -161,7 +164,7 @@ def register():
             first()
 
         if userDoc:
-            return jsonify(res='register error (すでにユーザーが存在します)'), 400 
+            return render_template('error.html', baseUrl=request.base_url, canInsert=False, docObj="{}", sentence="すでにユーザーが存在します")
 
         userDoc = tUsers(id=uuid.uuid4(), user_name=user_name, password=password)
 
@@ -220,22 +223,26 @@ def doc(uuid):
 
     docObj['units'] = unitsJson
 
-    return render_template('index.html', baseUrl=request.base_url, canInsert=False, docObj=docObj, sentence="")
+    return render_template('index.html', baseUrl=request.base_url, canInsert=False, docObj=docObj, sentence="", clipboard=False)
 
 @app.route('/read')
 def read():
     sentence = request.args.get('q')
+    clipboard = request.args.get('clipboard')
 
     if not sentence:
         sentence = ""
 
-    return render_template('index.html', baseUrl=request.base_url, canInsert=True, docObj="{}", sentence=sentence)
+    if clipboard == 'true':
+        clipboard = True
+
+    return render_template('index.html', baseUrl=request.base_url, canInsert=True, docObj="{}", sentence=sentence, clipboard=clipboard)
 
 @app.route('/result', methods=["POST"])
 def result():
     if request.headers['Content-Type'] != 'application/json':
         print(request.headers['Content-Type'])
-        return jsonify(res='error'), 400
+        return render_template('error.html', baseUrl=request.base_url, canInsert=False, docObj="{}", sentence="JSON を POST してください")
 
     data = request.json
     print(data)
@@ -257,7 +264,7 @@ def result():
 def insert():
     if request.headers['Content-Type'] != 'application/json':
         print(request.headers['Content-Type'])
-        return jsonify(res='error'), 400
+        return render_template('error.html', baseUrl=request.base_url, canInsert=False, docObj="{}", sentence="JSON を POST してください")
 
     data = request.json
     print(data)
@@ -285,7 +292,7 @@ def insert():
 def update():
     if request.headers['Content-Type'] != 'application/json':
         print(request.headers['Content-Type'])
-        return jsonify(res='error'), 400
+        return render_template('error.html', baseUrl=request.base_url, canInsert=False, docObj="{}", sentence="JSON を POST してください")
 
     data = request.json
     print(data)
@@ -307,7 +314,7 @@ def update():
 def delete():
     if request.headers['Content-Type'] != 'application/json':
         print(request.headers['Content-Type'])
-        return jsonify(res='error'), 400
+        return render_template('error.html', baseUrl=request.base_url, canInsert=False, docObj="{}", sentence="JSON を POST してください")
 
     data = request.json
     print(data)

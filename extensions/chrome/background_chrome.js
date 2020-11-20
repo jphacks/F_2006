@@ -10,9 +10,9 @@ chrome.contextMenus.create({
     let url = 'http://flash-reading-dev.herokuapp.com/read?q=' + encodeURI(sentence);//'https://flash-reading.herokuapp.com/read';
 
     // URLが長すぎる場合
-    if (url.length > 2047){
+    if (url.length > 2047) {
       const result = window.confirm("文章が長いので直接リンクを読み込むことができません。\nクリップボードにコピーしたうえで続行しますか。\n（新しいタブで開くのでテキストボックスに貼り付けてください。）");
-      if (result == true){
+      if (result == true) {
         // クリップボードにコピー
         const textArea = document.createElement("textarea");
         document.body.appendChild(textArea);
@@ -21,12 +21,12 @@ chrome.contextMenus.create({
         document.execCommand("copy");
 
         document.body.removeChild(textArea);
-        url = "http://flash-reading-dev.herokuapp.com/read";
+        url = "http://flash-reading-dev.herokuapp.com/read?clipboard=true";
       }
       else
         return;
 
     }
     window.open(url, 'newtab');
-    }
+  }
 })

@@ -56,7 +56,7 @@ function render() {
 	requestAnimationFrame(render);
 }
 
-window.addEventListener("load", () => {
+window.addEventListener("load", async () => {
 	sizing();
 
 	//cvs.scale(3, 3);
@@ -135,9 +135,20 @@ window.addEventListener("load", () => {
 				document.getElementById(domId).style.display = "none";
 		}
 
-		if (sentence.length > 0) {
-			initialSentence = sentence;
-			document.getElementById("main-text").value = sentence;
+		let initText = sentence;
+
+		if (clipboard) {
+			const clipText = await navigator.clipboard.readText();
+
+			console.log(clipText);
+
+			if (clipText.length > 0)
+				initText = clipText;
+		}
+
+		if (initText.length > 0) {
+			initialSentence = initText;
+			document.getElementById("main-text").value = initText;
 			isInitial = false;
 		} else {
 			isInitial = true;

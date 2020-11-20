@@ -30,6 +30,8 @@
 		const sentence = `{{sentence}}`;
 		{% endautoescape %}
 
+		const clipboard = `{{clipboard}}` === "True";
+
 		let currentUser = null;
 
 		{% if current_user.is_authenticated %}
