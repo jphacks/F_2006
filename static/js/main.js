@@ -138,12 +138,14 @@ window.addEventListener("load", async () => {
 		let initText = sentence;
 
 		if (clipboard) {
-			const clipText = await navigator.clipboard.readText();
+			if (navigator.clipboard) {
+				const clipText = await navigator.clipboard.readText();
 
-			console.log(clipText);
+				console.log(clipText);
 
-			if (clipText.length > 0)
-				initText = clipText;
+				if (clipText.length > 0)
+					initText = clipText;
+			}
 		}
 
 		if (initText.length > 0) {
