@@ -2,71 +2,103 @@
 
 <!--ナビゲーションバー-->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02"
-    aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <a class="navbar-brand text-monospace" style="pointer-events: none">Flash Reading</a>
+	<button
+		class="navbar-toggler navbar-toggler-right"
+		type="button"
+		data-toggle="collapse"
+		data-target="#navbarTogglerDemo02"
+		aria-controls="navbarTogglerDemo02"
+		aria-expanded="false"
+		aria-label="Toggle navigation"
+	>
+		<span class="navbar-toggler-icon"></span>
+	</button>
+	<a class="navbar-brand text-monospace" style="pointer-events: none"
+		>Flash Reading</a
+	>
 
-  <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-    <ul class="navbar-nav mr-auto mt-2 mt-md-0">
-      <li class="nav-item">
-        <a class="nav-link" href="{{url_for('home')}}">説明 </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{{url_for('read')}}">Try！</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{{url_for('list')}}">保存した文書</a>
-      </li>
-      {% if current_user.is_authenticated %}
-      <li class="nav-item">
-        <a class="nav-link" href="{{url_for('logout')}}">ログアウト</a>
-      </li>
-      {% else %}
-      <li class="nav-item">
-        <a class="nav-link" id="item-login" href="{{url_for('login')}}">ログイン</a>
-      </li>
-      {% endif %}
-      <li class="nav-item">
-        <a class="nav-link" id="item-register" href="{{url_for('register')}}">ユーザー登録</a>
-      </li>
-    </ul>
-    <ul class="navbar-nav mt-2 mt-md-0">
-      {% if current_user.is_authenticated %}
-      <li class="nav-item active">
-        <a class="nav-link">{{current_user.user_name}}</a>
-      </li>
-      {% endif %}
-    </ul>
-  </div>
+	<div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+		<ul class="navbar-nav mr-auto mt-2 mt-md-0">
+			<li class="nav-item">
+				<a class="nav-link" href="{{url_for('home')}}">説明 </a>
+			</li>
+			{% if current_user.is_authenticated %}
+			<li class="nav-item">
+				<a class="nav-link" href="{{url_for('read')}}">Try！</a>
+			</li>
+			{% else %}
+			<li class="nav-item">
+				<a class="nav-link" href="{{url_for('read2')}}">Try！</a>
+			</li>
+			{% endif %}
+			<li class="nav-item">
+				<a class="nav-link" href="{{url_for('list')}}">保存した文書</a>
+			</li>
+			{% if current_user.is_authenticated %}
+			<li class="nav-item">
+				<a class="nav-link" href="{{url_for('logout')}}">ログアウト</a>
+			</li>
+			{% else %}
+			<li class="nav-item">
+				<a class="nav-link" id="item-login" href="{{url_for('login')}}"
+					>ログイン</a
+				>
+			</li>
+			{% endif %}
+			<li class="nav-item">
+				<a class="nav-link" id="item-register" href="{{url_for('register')}}"
+					>ユーザー登録</a
+				>
+			</li>
+		</ul>
+		<ul class="navbar-nav mt-2 mt-md-0">
+			{% if current_user.is_authenticated %}
+			<li class="nav-item active">
+				<a class="nav-link">{{current_user.user_name}}</a>
+			</li>
+			{% endif %}
+		</ul>
+	</div>
 </nav>
 
 <script>
-  const action = "{{action}}";
+	const action = "{{action}}";
 
-  const dom = document.getElementById(action === 'login' ? 'item-login' : 'item-register');
+	const dom = document.getElementById(
+		action === "login" ? "item-login" : "item-register"
+	);
 
-  if (!dom.classList.contains('active'))
-    dom.classList.add('active');
+	if (!dom.classList.contains("active")) dom.classList.add("active");
 </script>
 
 <div class="container login-container">
-  <div class="row">
-    <div class="col-md-6 offset-md-3 login-form">
-      <h3>{{formName}}</h3>
-      <form action="{{action}}" method="POST">
-        <div class="form-group">
-          <input type="text" name="user-name" class="form-control" placeholder="Your Username *" value="" />
-        </div>
-        <div class="form-group">
-          <input type="password" name="password" class="form-control" placeholder="Your Password *" value="" />
-        </div>
-        <div class="form-group">
-          <input type="submit" class="btnSubmit" value="{{buttonName}}" />
-        </div>
-      </form>
-    </div>
-  </div>
+	<div class="row">
+		<div class="col-md-6 offset-md-3 login-form">
+			<h3>{{formName}}</h3>
+			<form action="{{action}}" method="POST">
+				<div class="form-group">
+					<input
+						type="text"
+						name="user-name"
+						class="form-control"
+						placeholder="Your Username *"
+						value=""
+					/>
+				</div>
+				<div class="form-group">
+					<input
+						type="password"
+						name="password"
+						class="form-control"
+						placeholder="Your Password *"
+						value=""
+					/>
+				</div>
+				<div class="form-group">
+					<input type="submit" class="btnSubmit" value="{{buttonName}}" />
+				</div>
+			</form>
+		</div>
+	</div>
 </div>
 {% endblock %}

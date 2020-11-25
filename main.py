@@ -16,9 +16,11 @@ from Cryptodome.Cipher import AES
 app = Flask(__name__)
 CORS(app)
 
-db_uri = os.environ.get('DATABASE_URL') or "postgresql://admin:admin@localhost:5433/flash-reading-db"
+db_uri = os.environ.get(
+    'DATABASE_URL') or "postgresql://admin:admin@localhost:5433/flash-reading-db"
 app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 db = SQLAlchemy(app)
+
 
 class tDocuments(db.Model):
     __tablename__ = 't_documents'
@@ -40,15 +42,18 @@ class tDocuments(db.Model):
         self.updated_at = now
         self.current_pos = current_pos
 
+
 ma = Marshmallow(app)
+
 
 class tDocumentsSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = tDocuments
         load_instance = True
-    
+
     created_at = fields.DateTime('%Y-%m-%dT%H:%M:%S+09:00')
     updated_at = fields.DateTime('%Y-%m-%dT%H:%M:%S+09:00')
+
 
 class tSplitUnits(db.Model):
     __tablename__ = 't_split_units'
@@ -57,16 +62,19 @@ class tSplitUnits(db.Model):
     index = db.Column(db.Integer, primary_key=False)
     content = db.Column(db.Text, primary_key=False)
 
+
 class tSplitUnitsSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = tSplitUnits
         load_instance = True
-    
+
+
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 app.config['SECRET_KEY'] = "secret"
+
 
 class tUsers(UserMixin, db.Model):
     __tablename__ = 't_users'
@@ -75,6 +83,8 @@ class tUsers(UserMixin, db.Model):
     password = db.Column(db.String(36), primary_key=False)
 
 # キー設定関数
+
+
 def create_key(KeyWord):
     key_size = 32
     KeySizeFill = KeyWord.zfill(key_size)
@@ -83,6 +93,8 @@ def create_key(KeyWord):
     return Key
 
 # パスワードの暗号化関数
+
+
 def encryptPassword(PassWord, KeyWord):
     iv = b"1234567890123456"
     Key = create_key(KeyWord)
@@ -93,27 +105,33 @@ def encryptPassword(PassWord, KeyWord):
     return ret_bytes
 
 # パスワードの複合化関数
+
+
 def decodePassword(Password, KeyWord):
     iv = b"1234567890123456"   # 初期化ベクトル設定
-    key = create_key(KeyWord) # キー設定
+    key = create_key(KeyWord)  # キー設定
 
     obj = AES.new(key, AES.MODE_CFB, iv)
-    OPassword = obj.decrypt(PassWord.encode(encoding='utf-8')).decode('utf-8') #パスワードの複合化
+    OPassword = obj.decrypt(PassWord.encode(
+        encoding='utf-8')).decode('utf-8')  # パスワードの複合化
 
     return OPassword
+
 
 @login_manager.user_loader
 def load_user(uuid):
     userDoc = db.session.\
-                    query(tUsers).\
-                    filter(tUsers.id==uuid).\
-                    first()
+        query(tUsers).\
+        filter(tUsers.id == uuid).\
+        first()
 
     return userDoc
 
+
 @app.route('/')
 def home():
-    return render_template('home.html', baseUrl=request.base_url, docObj="{}") 
+    return render_template('home.html', baseUrl=request.base_url, docObj="{}")
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -125,8 +143,8 @@ def login():
 
         userDoc = db.session.\
             query(tUsers).\
-            filter(tUsers.user_name==user_name).\
-            filter(tUsers.password==password).\
+            filter(tUsers.user_name == user_name).\
+            filter(tUsers.password == password).\
             first()
 
         print(userDoc)
@@ -136,16 +154,18 @@ def login():
 
             return redirect(url_for('home'))
         else:
-            return jsonify(res='login error'), 400 
+            return jsonify(res='login error'), 400
     else:
-        return render_template('login.html', buttonName="Login", formName='ログイン', action="login", docObj="{}")           
+        return render_template('login.html', buttonName="Login", formName='ログイン', action="login", docObj="{}")
+
 
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
 
-    return redirect(url_for('home'))    
+    return redirect(url_for('home'))
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -157,13 +177,14 @@ def register():
 
         userDoc = db.session.\
             query(tUsers).\
-            filter(tUsers.user_name==user_name).\
+            filter(tUsers.user_name == user_name).\
             first()
 
         if userDoc:
-            return jsonify(res='register error (すでにユーザーが存在します)'), 400 
+            return jsonify(res='register error (すでにユーザーが存在します)'), 400
 
-        userDoc = tUsers(id=uuid.uuid4(), user_name=user_name, password=password)
+        userDoc = tUsers(id=uuid.uuid4(), user_name=user_name,
+                         password=password)
 
         db.session.add(userDoc)
         db.session.commit()
@@ -172,33 +193,34 @@ def register():
     else:
         return render_template('login.html', buttonName="Register", formName='ユーザー登録', action="register", docObj="{}")
 
+
 @app.route('/list')
 @login_required
 def list():
     docs = db.session.\
-                query(tDocuments).\
-                filter(tDocuments.user_uuid == current_user.id).\
-                all()
+        query(tDocuments).\
+        filter(tDocuments.user_uuid == current_user.id).\
+        all()
 
     print(docs)
 
-    docsJson = tDocumentsSchema(many=True).dump(docs) 
+    docsJson = tDocumentsSchema(many=True).dump(docs)
 
     docList = docs
 
     docsObj = {}
     docsObj['docs'] = docsJson
 
-    return render_template('list.html', baseUrl=request.base_url, docList=docList, docObj="{}", docsObj=docsObj) 
+    return render_template('list.html', baseUrl=request.base_url, docList=docList, docObj="{}", docsObj=docsObj)
 
 # uuid 既存の文書のみ
 @app.route('/doc/<string:uuid>')
 @login_required
 def doc(uuid):
     doc = db.session.\
-                query(tDocuments).\
-                filter(tDocuments.uuid==uuid).\
-                first()
+        query(tDocuments).\
+        filter(tDocuments.uuid == uuid).\
+        first()
 
     print(doc)
 
@@ -209,11 +231,11 @@ def doc(uuid):
     docObj['doc'] = docJson
 
     units = db.session.\
-               query(tSplitUnits).\
-               filter(tSplitUnits.doc_uuid == doc.uuid).\
-               order_by(tSplitUnits.index).\
-               all()
-    
+        query(tSplitUnits).\
+        filter(tSplitUnits.doc_uuid == doc.uuid).\
+        order_by(tSplitUnits.index).\
+        all()
+
     unitsJson = tSplitUnitsSchema(many=True).dump(units)
 
     print(unitsJson)
@@ -222,10 +244,17 @@ def doc(uuid):
 
     return render_template('index.html', baseUrl=request.base_url, canInsert=False, docObj=docObj)
 
+# 読書ページ（保存機能つき）
 @app.route('/read')
 @login_required
 def read():
     return render_template('index.html', baseUrl=request.base_url, canInsert=True, docObj="{}")
+
+# ログイン不要の読書ページ
+@app.route('/read2')
+def read2():
+    return render_template('index2.html', baseUrl=request.base_url, canInsert=True, docObj="{}")
+
 
 @app.route('/result', methods=["POST"])
 def result():
@@ -235,7 +264,7 @@ def result():
 
     data = request.json
     print(data)
-    
+
     data = data['text']
 
     # ここで処理
@@ -260,14 +289,16 @@ def insert():
 
     docUuid = uuid.uuid4()
 
-    doc = tDocuments(uuid=docUuid, user_uuid=current_user.id, content=data['content'], name=data['name'], current_pos=data['current_pos'])
+    doc = tDocuments(uuid=docUuid, user_uuid=current_user.id,
+                     content=data['content'], name=data['name'], current_pos=data['current_pos'])
     db.session.add(doc)
 
     idx = 0
 
     for unit in data['split_units']:
         unitUuid = uuid.uuid4()
-        unitDoc = tSplitUnits(uuid=unitUuid, doc_uuid=docUuid, index=idx, content=unit)
+        unitDoc = tSplitUnits(
+            uuid=unitUuid, doc_uuid=docUuid, index=idx, content=unit)
         db.session.add(unitDoc)
         idx += 1
 
@@ -287,14 +318,14 @@ def update():
     print(data)
 
     doc = db.session.\
-             query(tDocuments).\
-             filter(tDocuments.uuid==data['uuid']).\
-             first()
+        query(tDocuments).\
+        filter(tDocuments.uuid == data['uuid']).\
+        first()
     doc.current_pos = data['current_pos']
     doc.updated_at = datetime.now()
 
     db.session.commit()
-    
+
     return jsonify(success=True)
 
 # required param: uuid のみ
@@ -309,23 +340,24 @@ def delete():
     print(data)
 
     doc = db.session.\
-             query(tDocuments).\
-             filter(tDocuments.uuid==data['uuid']).\
-             first()
+        query(tDocuments).\
+        filter(tDocuments.uuid == data['uuid']).\
+        first()
     db.session.delete(doc)
 
     units = db.session.\
-       query(tSplitUnits).\
-       filter(tSplitUnits.doc_uuid==data['uuid']).\
-       all()
+        query(tSplitUnits).\
+        filter(tSplitUnits.doc_uuid == data['uuid']).\
+        all()
 
     for unit in units:
         db.session.delete(unit)
 
     db.session.commit()
-    
+
     return jsonify(success=True)
 
-#おまじない
+
+# おまじない
 if __name__ == '__main__':
     app.run(debug=True)
