@@ -1,0 +1,23 @@
+{
+  "name": "Flash Reading Extensions",
+  "version": "0.1",
+  "manifest_version": 2,
+  "description": "この拡張機能でFlash Readingとあなたをより近くに配置します。",
+  "permissions": [
+    "tabs",
+    "http://*/*",
+    "https://*/*",
+    "contextMenus",
+    "storage"
+  ],
+  "background": {
+    "scripts": [
+      "background_chrome.js"
+    ]
+  },
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  }
+}

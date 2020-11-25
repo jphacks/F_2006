@@ -1,0 +1,65 @@
+{% extends "layout.html" %} {% block content %}
+<!--ナビゲーションバー-->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02"
+    aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand text-monospace" style="pointer-events: none;">Flash Reading</a>
+
+  <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+    <ul class="navbar-nav mr-auto mt-2 mt-md-0">
+      <li class="nav-item">
+        <a class="nav-link" href="{{url_for('home')}}">説明 </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{url_for('read')}}">Try！</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{url_for('list')}}">保存した文書</a>
+      </li>
+      {% if current_user.is_authenticated %}
+      <li class="nav-item">
+        <a class="nav-link" href="{{url_for('logout')}}">ログアウト</a>
+      </li>
+      {% else %}
+      <li class="nav-item">
+        <a class="nav-link" href="{{url_for('login')}}">ログイン</a>
+      </li>
+      {% endif %}
+      <li class="nav-item">
+        <a class="nav-link" href="{{url_for('register')}}">ユーザー登録</a>
+      </li>
+    </ul>
+    <ul class="navbar-nav mt-2 mt-md-0">
+      {% if current_user.is_authenticated %}
+      <li class="nav-item active">
+        <a class="nav-link">{{current_user.user_name}}</a>
+      </li>
+      {% endif %}
+    </ul>
+  </div>
+</nav>
+<div class="container" style="letter-spacing: 0.08em" 　>
+  <div class="row">
+    <div class="col-1"></div>
+    <div class="col-10">
+      <div style="margin: 40px"></div>
+      <h2 style="line-height: 1.4em; text-align: center">
+        エラーが発生しました
+      </h2>
+      <div style="margin: 20px"></div>
+      <h3 style="line-height: 1.4em; text-align: center">
+        {{sentence}}
+      </h3>
+    </div>
+    <div class="col-1"></div>
+  </div>
+  <div style="margin: 40px"></div>
+  <div style="text-align: center">
+    <a href="{{url_for('home')}}" class="btn btn-dark text-center">
+      ホーム画面に戻る
+    </a>
+  </div>
+</div>
+{% endblock %}

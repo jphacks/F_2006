@@ -1,6 +1,6 @@
 let texts = [""];
 
-const initialSentence =
+let initialSentence =
 	"Flash Readingは、語句を連続でフラッシュ表示する「高速逐次視覚提示」を用いてテキストを高速に読むことを可能にしたアプリです。\
 PDFや写真をテキストエリアにドラッグ & ドロップすると文字を読み取ることができます。";
 
@@ -40,9 +40,7 @@ function render() {
 		ctx.fillText("テキスト読み込み中...", scrW / 2, 100 + textSize / 2);
 	else if (isParse)
 		ctx.fillText("[再生/一時停止]で開始", scrW / 2, 100 + textSize / 2);
-	else
-		ctx.fillText(texts[pointer], scrW / 2, 100 + textSize / 2);
-
+	else ctx.fillText(texts[pointer], scrW / 2, 100 + textSize / 2);
 
 	ctx.font = "normal 30px 'Yu Gothic'";
 
@@ -56,7 +54,7 @@ function render() {
 	requestAnimationFrame(render);
 }
 
-window.addEventListener("load", () => {
+window.addEventListener("load", async () => {
 	sizing();
 
 	//cvs.scale(3, 3);
@@ -88,19 +86,15 @@ window.addEventListener("load", () => {
 
 	render();
 
-	const sessionBgColor = localStorage.getItem('flash-reading-bgColor');
-	const sessionTextColor = localStorage.getItem('flash-reading-textColor');
-	const sessionTextSize = localStorage.getItem('flash-reading-textSize');
-	const sessionSpanMs = localStorage.getItem('flash-reading-spanMs');
+	const sessionBgColor = localStorage.getItem("flash-reading-bgColor");
+	const sessionTextColor = localStorage.getItem("flash-reading-textColor");
+	const sessionTextSize = localStorage.getItem("flash-reading-textSize");
+	const sessionSpanMs = localStorage.getItem("flash-reading-spanMs");
 
-	if (sessionBgColor)
-		bgColor = sessionBgColor;
-	if (sessionTextColor)
-		textColor = sessionTextColor;
-	if (sessionTextSize)
-		textSize = sessionTextSize;
-	if (sessionSpanMs)
-		spanMs = sessionSpanMs;
+	if (sessionBgColor) bgColor = sessionBgColor;
+	if (sessionTextColor) textColor = sessionTextColor;
+	if (sessionTextSize) textSize = sessionTextSize;
+	if (sessionSpanMs) spanMs = sessionSpanMs;
 
 	onSliderInput(spanMs);
 	onTextSliderInput(textSize);
@@ -126,7 +120,33 @@ window.addEventListener("load", () => {
 		for (let domId of invisibleList)
 			document.getElementById(domId).style.display = "none";
 
-		isInitial = true;
+		if (!currentUser) {
+			const invisibleList = ["btn-doc-save"];
+
+			for (let domId of invisibleList)
+				document.getElementById(domId).style.display = "none";
+		}
+
+		let initText = sentence;
+
+		if (clipboard) {
+			if (navigator.clipboard) {
+				const clipText = await navigator.clipboard.readText();
+
+				console.log(clipText);
+
+				if (clipText.length > 0) initText = clipText;
+			}
+		}
+
+		if (initText.length > 0) {
+			initialSentence = initText;
+			document.getElementById("main-text").value = initText;
+			isInitial = false;
+		} else {
+			isInitial = true;
+		}
+
 		onSubmit(initialSentence);
 	}
 
@@ -146,7 +166,7 @@ function onSliderInput(value) {
 
 	const message = "読み上げる間隔：" + spanMs + " ms";
 
-	localStorage.setItem('flash-reading-spanMs', spanMs);
+	localStorage.setItem("flash-reading-spanMs", spanMs);
 
 	document.getElementById("speed-slider").value = spanMs;
 	document.getElementById("read-speed").innerText = message;
@@ -237,8 +257,8 @@ function setColor(colorBg, colorTxt) {
 	bgColor = colorBg;
 	textColor = colorTxt;
 
-	localStorage.setItem('flash-reading-bgColor', colorBg);
-	localStorage.setItem('flash-reading-textColor', colorTxt);
+	localStorage.setItem("flash-reading-bgColor", colorBg);
+	localStorage.setItem("flash-reading-textColor", colorTxt);
 
 	document.getElementById("body").style.backgroundColor = bgColor;
 
@@ -270,7 +290,7 @@ function onTextSliderInput(size) {
 
 	const message = "テキストサイズ：" + size + " px";
 
-	localStorage.setItem('flash-reading-textSize', textSize);
+	localStorage.setItem("flash-reading-textSize", textSize);
 
 	document.getElementById("text-slider").value = textSize;
 	document.getElementById("text-size").innerText = message;
@@ -309,10 +329,8 @@ async function onSave() {
 	if (!(name = window.prompt("保存する文書の名前を入力してください"))) {
 		lastText = prevText;
 
-		if (!name)
-			return alert("名前が空です");
-		else
-			return;
+		if (!name) return alert("名前が空です");
+		else return;
 	}
 
 	if (name && name.length) {
@@ -409,3 +427,16 @@ function formatDate(dateStr) {
 
 	return ret;
 }
+
+document.addEventListener("keydown", (event) => {
+	var keyName = event.key;
+
+	if (keyName === "ArrowRight") {
+		onSkip();
+	} else if (keyName === "ArrowLeft") {
+		onBack();
+	} else if (keyName == " ") {
+		event.preventDefault();
+		onParse();
+	}
+});
