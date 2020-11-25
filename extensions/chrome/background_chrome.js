@@ -7,7 +7,7 @@ chrome.contextMenus.create({
   onclick: function (info) {
     const sentence = info.selectionText;
 
-    let url = 'http://flash-reading-dev.herokuapp.com/read?q=' + encodeURI(sentence);//'https://flash-reading.herokuapp.com/read';
+    let url = 'http://flash-reading.herokuapp.com/read?q=' + encodeURI(sentence);//'https://flash-reading.herokuapp.com/read';
 
     // URLが長すぎる場合
     if (url.length > 2047) {
@@ -21,7 +21,7 @@ chrome.contextMenus.create({
         document.execCommand("copy");
 
         document.body.removeChild(textArea);
-        url = "http://flash-reading-dev.herokuapp.com/read?clipboard=true";
+        url = "http://flash-reading.herokuapp.com/read?clipboard=true";
       }
       else
         return;
