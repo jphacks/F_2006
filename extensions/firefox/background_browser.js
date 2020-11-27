@@ -9,7 +9,7 @@ browser.contextMenus.create({
 browser.contextMenus.onClicked.addListener(function (info, tab) {
   const sentence = info.selectionText;
 
-  let url = 'http://flash-reading.herokuapp.com/read?q=' + encodeURI(sentence);//'https://flash-reading.herokuapp.com/read';
+  let url = 'http://flash-reading.herokuapp.com/read?q=' + encodeURIComponent(sentence);//'https://flash-reading.herokuapp.com/read';
 
   // URLが長すぎる場合
   if (url.length > 2047) {
