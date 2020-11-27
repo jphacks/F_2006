@@ -21,7 +21,7 @@ chrome.contextMenus.create({
         document.execCommand("copy");
 
         document.body.removeChild(textArea);
-        url = "http://flash-reading/read?clipboard=true";//"http://flash-reading-dev.herokuapp.com/read?clipboard=true";
+        url = "http://flash-reading.herokuapp.com/read?clipboard=true";//"http://flash-reading-dev.herokuapp.com/read?clipboard=true";
       }
       else
         return;
